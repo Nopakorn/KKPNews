@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02633CD756F860C3597EB3E4 /* libPods-KKPNews.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146CD6DF9022665B65DDB95A /* libPods-KKPNews.a */; };
 		5C4FEC0C1D0A6C2C00894E56 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4FEC0B1D0A6C2C00894E56 /* main.m */; };
 		5C4FEC0F1D0A6C2C00894E56 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4FEC0E1D0A6C2C00894E56 /* AppDelegate.m */; };
-		5C4FEC121D0A6C2C00894E56 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4FEC111D0A6C2C00894E56 /* ViewController.m */; };
 		5C4FEC151D0A6C2C00894E56 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C4FEC131D0A6C2C00894E56 /* Main.storyboard */; };
 		5C4FEC181D0A6C2C00894E56 /* KKPNews.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5C4FEC161D0A6C2C00894E56 /* KKPNews.xcdatamodeld */; };
 		5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C4FEC191D0A6C2C00894E56 /* Assets.xcassets */; };
 		5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C4FEC1B1D0A6C2C00894E56 /* LaunchScreen.storyboard */; };
 		5C4FEC281D0A6C2C00894E56 /* KKPNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4FEC271D0A6C2C00894E56 /* KKPNewsTests.m */; };
 		5C4FEC331D0A6C2C00894E56 /* KKPNewsUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4FEC321D0A6C2C00894E56 /* KKPNewsUITests.m */; };
+		5C5A33B41D0E7118005D7109 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33B31D0E7118005D7109 /* MainViewController.m */; };
+		5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C5A33BA1D0E779D005D7109 /* YoutubeListCustomCell.xib */; };
+		5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */; };
+		5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C11D0E957B005D7109 /* Youtube.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,12 +40,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		146CD6DF9022665B65DDB95A /* libPods-KKPNews.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KKPNews.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C4FEC071D0A6C2C00894E56 /* KKPNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KKPNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C4FEC0B1D0A6C2C00894E56 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5C4FEC0D1D0A6C2C00894E56 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5C4FEC0E1D0A6C2C00894E56 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5C4FEC101D0A6C2C00894E56 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		5C4FEC111D0A6C2C00894E56 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		5C4FEC141D0A6C2C00894E56 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5C4FEC171D0A6C2C00894E56 /* KKPNews.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KKPNews.xcdatamodel; sourceTree = "<group>"; };
 		5C4FEC191D0A6C2C00894E56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -53,6 +56,15 @@
 		5C4FEC2E1D0A6C2C00894E56 /* KKPNewsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KKPNewsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C4FEC321D0A6C2C00894E56 /* KKPNewsUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KKPNewsUITests.m; sourceTree = "<group>"; };
 		5C4FEC341D0A6C2C00894E56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5C5A33B21D0E7118005D7109 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		5C5A33B31D0E7118005D7109 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		5C5A33BA1D0E779D005D7109 /* YoutubeListCustomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YoutubeListCustomCell.xib; sourceTree = "<group>"; };
+		5C5A33BD1D0E78EE005D7109 /* YoutubeListCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoutubeListCustomCell.h; sourceTree = "<group>"; };
+		5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YoutubeListCustomCell.m; sourceTree = "<group>"; };
+		5C5A33C01D0E957B005D7109 /* Youtube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Youtube.h; sourceTree = "<group>"; };
+		5C5A33C11D0E957B005D7109 /* Youtube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Youtube.m; sourceTree = "<group>"; };
+		8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.release.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.release.xcconfig"; sourceTree = "<group>"; };
+		9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02633CD756F860C3597EB3E4 /* libPods-KKPNews.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +100,8 @@
 				5C4FEC261D0A6C2C00894E56 /* KKPNewsTests */,
 				5C4FEC311D0A6C2C00894E56 /* KKPNewsUITests */,
 				5C4FEC081D0A6C2C00894E56 /* Products */,
+				7AD095AD1206DDF847ABA63C /* Pods */,
+				76F10EF439F0FCA3AE4FD790 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,16 +118,20 @@
 		5C4FEC091D0A6C2C00894E56 /* KKPNews */ = {
 			isa = PBXGroup;
 			children = (
+				5C5A33BC1D0E78CE005D7109 /* Views */,
+				5C5A33B51D0E75EA005D7109 /* CustomCells */,
 				5C4FEC0D1D0A6C2C00894E56 /* AppDelegate.h */,
 				5C4FEC0E1D0A6C2C00894E56 /* AppDelegate.m */,
-				5C4FEC101D0A6C2C00894E56 /* ViewController.h */,
-				5C4FEC111D0A6C2C00894E56 /* ViewController.m */,
 				5C4FEC131D0A6C2C00894E56 /* Main.storyboard */,
 				5C4FEC191D0A6C2C00894E56 /* Assets.xcassets */,
 				5C4FEC1B1D0A6C2C00894E56 /* LaunchScreen.storyboard */,
 				5C4FEC1E1D0A6C2C00894E56 /* Info.plist */,
 				5C4FEC161D0A6C2C00894E56 /* KKPNews.xcdatamodeld */,
 				5C4FEC0A1D0A6C2C00894E56 /* Supporting Files */,
+				5C5A33B21D0E7118005D7109 /* MainViewController.h */,
+				5C5A33B31D0E7118005D7109 /* MainViewController.m */,
+				5C5A33C01D0E957B005D7109 /* Youtube.h */,
+				5C5A33C11D0E957B005D7109 /* Youtube.m */,
 			);
 			path = KKPNews;
 			sourceTree = "<group>";
@@ -143,6 +162,40 @@
 			path = KKPNewsUITests;
 			sourceTree = "<group>";
 		};
+		5C5A33B51D0E75EA005D7109 /* CustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				5C5A33BA1D0E779D005D7109 /* YoutubeListCustomCell.xib */,
+			);
+			name = CustomCells;
+			sourceTree = "<group>";
+		};
+		5C5A33BC1D0E78CE005D7109 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5C5A33BD1D0E78EE005D7109 /* YoutubeListCustomCell.h */,
+				5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		76F10EF439F0FCA3AE4FD790 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				146CD6DF9022665B65DDB95A /* libPods-KKPNews.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7AD095AD1206DDF847ABA63C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */,
+				8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -150,9 +203,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5C4FEC371D0A6C2C00894E56 /* Build configuration list for PBXNativeTarget "KKPNews" */;
 			buildPhases = (
+				145365A4DF294151845ECA15 /* Check Pods Manifest.lock */,
 				5C4FEC031D0A6C2C00894E56 /* Sources */,
 				5C4FEC041D0A6C2C00894E56 /* Frameworks */,
 				5C4FEC051D0A6C2C00894E56 /* Resources */,
+				B434F890BE43C720D86F2D58 /* Embed Pods Frameworks */,
+				F215A6603D744DD215AC83F8 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -210,6 +266,7 @@
 				TargetAttributes = {
 					5C4FEC061D0A6C2C00894E56 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = P8RWE3RJ59;
 					};
 					5C4FEC221D0A6C2C00894E56 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -248,6 +305,7 @@
 			files = (
 				5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */,
 				5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */,
+				5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */,
 				5C4FEC151D0A6C2C00894E56 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,15 +326,65 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		145365A4DF294151845ECA15 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B434F890BE43C720D86F2D58 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F215A6603D744DD215AC83F8 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5C4FEC031D0A6C2C00894E56 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C4FEC121D0A6C2C00894E56 /* ViewController.m in Sources */,
 				5C4FEC0F1D0A6C2C00894E56 /* AppDelegate.m in Sources */,
+				5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */,
 				5C4FEC0C1D0A6C2C00894E56 /* main.m in Sources */,
+				5C5A33B41D0E7118005D7109 /* MainViewController.m in Sources */,
 				5C4FEC181D0A6C2C00894E56 /* KKPNews.xcdatamodeld in Sources */,
+				5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,23 +525,33 @@
 		};
 		5C4FEC381D0A6C2C00894E56 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = KKPNews/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ssd.KKPNews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		5C4FEC391D0A6C2C00894E56 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = KKPNews/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ssd.KKPNews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -502,6 +620,7 @@
 				5C4FEC391D0A6C2C00894E56 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C4FEC3A1D0A6C2C00894E56 /* Build configuration list for PBXNativeTarget "KKPNewsTests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +629,7 @@
 				5C4FEC3C1D0A6C2C00894E56 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C4FEC3D1D0A6C2C00894E56 /* Build configuration list for PBXNativeTarget "KKPNewsUITests" */ = {
 			isa = XCConfigurationList;
@@ -518,6 +638,7 @@
 				5C4FEC3F1D0A6C2C00894E56 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
