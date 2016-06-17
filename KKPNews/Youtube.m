@@ -26,6 +26,8 @@
         self.thumbnailList = [[NSMutableArray alloc] initWithCapacity:10];
         self.titleList = [[NSMutableArray alloc] initWithCapacity:10];
         self.durationList = [[NSMutableArray alloc] initWithCapacity:10];
+        self.publishedAtList = [[NSMutableArray alloc] initWithCapacity:10];
+        self.data = [[NSMutableArray alloc] initWithCapacity:10];
         self.search = @"search?";
         self.video = @"video?";
         self.youtube_api_key = @"AIzaSyAPT3PRTZdTQDdoOtwviiC0FQPpJvfQlWE";
@@ -45,6 +47,36 @@
 }
 
 #pragma new method
+- (void)getAllChannelIdFromList:(NSMutableArray *)channelList
+{
+//    NSMutableArray *multiReq = [[NSMutableArray alloc] initWithCapacity:10];
+//    NSString* urlString;
+//    for (int i = 0; i < [channelList count]; i++) {
+//         urlString = [NSString stringWithFormat:@"https://www.googleapis.com/youtube/v3/channels?part=id%%2Csnippet%%2CcontentDetails&forUsername=%@&key=%@", [channelList objectAtIndex:i] ,self.youtube_api_key];
+//        [multiReq addObject:urlString];
+//    }
+//    
+//    NSInteger count = [multiReq count];
+//    for (NSString *urlString in multiReq) {
+//        
+//        NSURL *url = [[NSURL alloc] initWithString:urlString];
+//        NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+//        [req setHTTPMethod:@"GET"];
+//        
+//        NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+//        [[session dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
+//            if(!error)
+//            {
+//                
+//                if (count == 0) {
+//                    
+//                }
+//            }
+//        }] resume];
+//
+//    }
+}
+
 - (void)getChannelIdFromPlaylistName:(NSString *)playlistName
 {
      NSString* urlString;
@@ -172,24 +204,10 @@
     for (NSDictionary* q in items) {
         [self.durationList addObject:q[@"contentDetails"][@"duration"]];
     }
+
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoDuration" object:self];
     
-    if ([checkResult isEqualToString:@"LoadVideoId"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
-    } else if ([checkResult isEqualToString:@"LoadVideoIdFromSearchNextPage"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoIdFromSearchNextPage" object:self];
-        
-    } else if ([checkResult isEqualToString:@"LoadVideoIdFromSearch"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoIdFromSearch" object:self];
-        
-    }  else if ([checkResult isEqualToString:@"LoadVideoIdNextPage"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoIdNextPage" object:self];
-        
-    } else if ([checkResult isEqualToString:@"LoadGenreVideoId"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadGenreVideoId" object:self];
-        
-    } else if ([checkResult isEqualToString:@"LoadGenreVideoIdNextPage"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadGenreVideoIdNextPage" object:self];
-    }
 }
 
 -(void)fetchVideos:(BOOL)nextPage
@@ -197,32 +215,29 @@
     NSArray* items = self.searchResults[@"items"];
     self.nextPageToken = self.searchResults[@"nextPageToken"];
     self.prevPageToken = self.searchResults[@"prevPageToken"];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+    
     for (NSDictionary* q in items) {
         if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
             [self.videoIdList addObject:q[@"contentDetails"][@"videoId"]];
             [self.titleList addObject:q[@"snippet"][@"title"]];
             [self.thumbnailList addObject:q[@"snippet"][@"thumbnails"][@"default"][@"url"]];
+            NSDate *dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
+            
+            NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
+                                    @"publishedAtList":dateFromString,
+                                    @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],
+                                    @"title":q[@"snippet"][@"title"] };
+            
+            [self.data addObject:data];
         }
     }
-    
-    if (nextPage) {
-        indexNexPage = (int)[self.durationList count];
-        self.videoIdListForGetDuration = @"";
-        for (int i = indexNexPage; i < [self.videoIdList count]; i++) {
-            self.videoIdListForGetDuration = [NSString stringWithFormat:@"%@,%@", self.videoIdListForGetDuration, [self.videoIdList objectAtIndex:i]];
-        }
-        
-    } else {
-        
-        for (int i = 0; i < [self.videoIdList count]; i++) {
-            self.videoIdListForGetDuration = [NSString stringWithFormat:@"%@,%@", self.videoIdListForGetDuration, [self.videoIdList objectAtIndex:i]];
-        }
-        
-    }
-    if ([self.videoIdListForGetDuration characterAtIndex:0] == ',') {
-        self.videoIdListForGetDuration = [self.videoIdListForGetDuration substringFromIndex:1];
-    }
-    [self getVideoDurations:self.videoIdListForGetDuration];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
+
+    //[self getVideoDurations:self.videoIdListForGetDuration];
 }
 
 @end

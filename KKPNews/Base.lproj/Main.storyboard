@@ -1,10 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VtU-IX-gGh">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="ezc-c0-vVU">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="VtU-IX-gGh" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bs1-Oo-Ahe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="4Le-gv-Suw" kind="relationship" relationship="rootViewController" id="uxc-Pp-EMO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ao6-HG-s4O" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-813" y="-314"/>
+        </scene>
+        <!--First Screen View Controller-->
+        <scene sceneID="HWO-pR-xj1">
+            <objects>
+                <viewController id="4Le-gv-Suw" customClass="FirstScreenViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uOT-Wq-8yz"/>
+                        <viewControllerLayoutGuide type="bottom" id="NjT-NO-YnH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0iv-IQ-GPk">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Splash Screen Bros" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hFp-6l-3dX">
+                                <rect key="frame" x="226" y="290" width="149" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PG2-nv-5uI">
+                                <rect key="frame" x="283" y="319" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hFp-6l-3dX" firstAttribute="centerX" secondItem="0iv-IQ-GPk" secondAttribute="centerX" id="8aN-gJ-BAA"/>
+                            <constraint firstItem="hFp-6l-3dX" firstAttribute="centerY" secondItem="0iv-IQ-GPk" secondAttribute="centerY" id="Ywv-qY-FYc"/>
+                            <constraint firstItem="hFp-6l-3dX" firstAttribute="leading" secondItem="PG2-nv-5uI" secondAttribute="trailing" constant="-77" id="c1B-GB-Lfy"/>
+                            <constraint firstItem="PG2-nv-5uI" firstAttribute="top" secondItem="hFp-6l-3dX" secondAttribute="bottom" constant="8" id="cwv-zg-kui"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="bPH-xv-aou"/>
+                    <connections>
+                        <outlet property="spinner" destination="PG2-nv-5uI" id="onr-aF-t1x"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="mainSegue" id="VRd-FK-ph5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ilL-dJ-Tva" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-94" y="-314"/>
+        </scene>
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -18,7 +74,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QU5-yG-pLC" customClass="YTPlayerView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="321"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="301"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kkv-kZ-WIY">
@@ -34,7 +90,7 @@
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="QU5-yG-pLC" secondAttribute="bottom" id="PYO-5O-ew3"/>
                             <constraint firstAttribute="trailing" secondItem="QU5-yG-pLC" secondAttribute="trailing" id="R6u-8W-2kW"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="QU5-yG-pLC" secondAttribute="bottom" constant="279" id="i4h-Gv-64b"/>
-                            <constraint firstItem="QU5-yG-pLC" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="kWT-WQ-ofB"/>
+                            <constraint firstItem="QU5-yG-pLC" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="kWT-WQ-ofB"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="uxE-Kk-AUW"/>
                         </constraints>
                     </view>
@@ -45,7 +101,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="265" y="454"/>
+            <point key="canvasLocation" x="653" y="-314"/>
         </scene>
     </scenes>
 </document>

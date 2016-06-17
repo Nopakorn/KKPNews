@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "AC986C191415ECD60705D464E351546A655E00E6",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "211FE17220C0A923D5670CEE9B7973F00AEA8758" : 0,
+    "AC986C191415ECD60705D464E351546A655E00E6" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "61A1EC71-AD4F-4764-A785-4A7859258532",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "211FE17220C0A923D5670CEE9B7973F00AEA8758" : "Youtube-Feed\/",
+    "AC986C191415ECD60705D464E351546A655E00E6" : "KKPNews\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "KKPNews",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "KKPNews.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Nopakorn\/Youtube-Feed.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "211FE17220C0A923D5670CEE9B7973F00AEA8758"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Nopakorn\/KKPNews.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AC986C191415ECD60705D464E351546A655E00E6"
+    }
+  ]
+}

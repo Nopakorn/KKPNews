@@ -21,17 +21,22 @@
     BOOL receivedVideo;
     NSInteger item;
 }
+@synthesize youtube;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     //testing UI
     receivedVideo = NO;
+    [self.navigationController setNavigationBarHidden:YES];
     self.playerView.delegate = self;
     item = 0;
 
     self.youtubeTableView.delegate = self;
     self.youtubeTableView.dataSource = self;
-    self.youtube = [[Youtube alloc] init];
-    [self makeYoutubeData];
+    //self.youtube = [[Youtube alloc] init];
+    //[self makeYoutubeData];
+    NSLog(@"Youtube count %lu",(unsigned long)[self.youtube.titleList count]);
+    [self playlingYoutube];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,32 +47,13 @@
 {
     self.playerVars =  @{ @"playsinline" : @1,
                           @"controls" : @0,
-                          @"showinfo" : @0,
-                          @"modestbranding" : @1,
+                          @"showinfo" : @1,
+                          @"modestbranding" : @0,
                           @"origin" :@"http://www.youtube.com"   };
     
-    [self.playerView loadWithVideoId:[self.youtube.videoIdList objectAtIndex:item] playerVars:self.playerVars];
+    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
 }
 
-- (void)makeYoutubeData
-{
-    [self.youtube getChannelIdFromPlaylistName:@"ANNnewsCH"];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedLoadVideoId)
-                                                 name:@"LoadVideoId" object:nil];
-}
-
-- (void)receivedLoadVideoId
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSLog(@"count id %lu and thumbnail %lu and duration %lu",(unsigned long)[self.youtube.videoIdList count], (unsigned long)[self.youtube.thumbnailList count], (unsigned long)[self.youtube.durationList count]);
-        [self playlingYoutube];
-        [self.youtubeTableView reloadData];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
-    });
-    
-}
 
 
 #pragma YTPlayerView delegate
@@ -80,7 +66,11 @@
 {
     if (state == kYTPlayerStateEnded) {
         item+=1;
-        [self.playerView loadWithVideoId:[self.youtube.videoIdList objectAtIndex:item] playerVars:self.playerVars];
+        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+        [self.youtubeTableView reloadData];
+    } else if (state == kYTPlayerStatePlaying) {
+        NSLog(@"--check time %@", [self stringFromTimeInterval:[self.playerView duration]]);
+        NSLog(@"--time from obj %@",[self.youtube.durationList objectAtIndex:item]);
     }
 }
 
@@ -92,8 +82,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self.youtube.videoIdList count] != 0) {
-        return [self.youtube.videoIdList count];
+    if ([self.youtube.data count] != 0) {
+        return [self.youtube.data count];
     }else{
         return 5;
     }
@@ -109,16 +99,16 @@
         cell = [nib objectAtIndex:0];
         
     }
-    if ([self.youtube.videoIdList count] != 0) {
+    if ([self.youtube.data count] != 0) {
         
-        cell.name.text = [self.youtube.titleList objectAtIndex:indexPath.row];
+        cell.name.text = [[self.youtube.data objectAtIndex:indexPath.row] objectForKey:@"title"];
         cell.tag = indexPath.row;
         NSString *duration = [self.youtube.durationList objectAtIndex:indexPath.row];
         cell.duration.text = [self durationText:duration];
         cell.thumnail.image = nil;
         
-        if([self.youtube.thumbnailList objectAtIndex:indexPath.row] != [NSNull null] ){
-            [cell.thumnail sd_setImageWithURL:[NSURL URLWithString:[self.youtube.thumbnailList objectAtIndex:indexPath.row]]
+        if([[self.youtube.data objectAtIndex:indexPath.row] objectForKey:@"thumbnail"] != [NSNull null] ){
+            [cell.thumnail sd_setImageWithURL:[NSURL URLWithString:[[self.youtube.data objectAtIndex:indexPath.row] objectForKey:@"thumbnail"]]
                                    placeholderImage:nil];
         }
 
@@ -135,6 +125,20 @@
     return cell;
 }
 
+- (NSString *)stringFromTimeInterval:(NSTimeInterval)interval {
+    NSInteger ti = (NSInteger)interval;
+    NSInteger seconds = ti % 60;
+    NSInteger minutes = (ti / 60) % 60;
+    NSInteger hours = (ti / 3600);
+    if (hours > 0) {
+        
+        return [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)hours, (long)minutes, (long)seconds];
+    } else {
+        
+        return [NSString stringWithFormat:@"%02ld:%02ld", (long)minutes, (long)seconds];
+    }
+    
+}
 - (NSString *)durationText:(NSString *)duration
 {
     NSInteger hours = 0;
@@ -183,7 +187,7 @@
 {
     [self.playerView pauseVideo];
     item = indexPath.row;
-    [self.playerView loadWithVideoId:[self.youtube.videoIdList objectAtIndex:item] playerVars:self.playerVars];
+    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
     [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.youtubeTableView reloadData];
 }

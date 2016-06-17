@@ -30,8 +30,9 @@
 @property (nonatomic, retain) NSMutableArray *titleList;
 @property (nonatomic, retain) NSMutableArray *thumbnailList;
 @property (nonatomic, retain) NSMutableArray *durationList;
-
+@property (nonatomic, retain) NSMutableArray *publishedAtList;
 @property (nonatomic, retain) NSMutableArray *selectedType;
+@property (nonatomic, retain) NSMutableArray *data;
 
 @property (nonatomic, retain) NSDictionary *searchResults;
 
@@ -41,5 +42,6 @@
 - (id)init;
 - (void)changeIndexNextPage:(int )newIndexNextPage;
 - (void)getChannelIdFromPlaylistName:(NSString *)playlistName;
+- (void)getVideoDurations:(NSString *)videoId;
 
 @end

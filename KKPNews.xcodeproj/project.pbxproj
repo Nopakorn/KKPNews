@@ -20,6 +20,7 @@
 		5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C5A33BA1D0E779D005D7109 /* YoutubeListCustomCell.xib */; };
 		5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */; };
 		5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C11D0E957B005D7109 /* Youtube.m */; };
+		5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,8 @@
 		5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YoutubeListCustomCell.m; sourceTree = "<group>"; };
 		5C5A33C01D0E957B005D7109 /* Youtube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Youtube.h; sourceTree = "<group>"; };
 		5C5A33C11D0E957B005D7109 /* Youtube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Youtube.m; sourceTree = "<group>"; };
+		5C5A33C31D112C9E005D7109 /* FirstScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstScreenViewController.h; sourceTree = "<group>"; };
+		5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstScreenViewController.m; sourceTree = "<group>"; };
 		8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.release.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.release.xcconfig"; sourceTree = "<group>"; };
 		9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,11 +130,13 @@
 				5C4FEC1B1D0A6C2C00894E56 /* LaunchScreen.storyboard */,
 				5C4FEC1E1D0A6C2C00894E56 /* Info.plist */,
 				5C4FEC161D0A6C2C00894E56 /* KKPNews.xcdatamodeld */,
-				5C4FEC0A1D0A6C2C00894E56 /* Supporting Files */,
-				5C5A33B21D0E7118005D7109 /* MainViewController.h */,
-				5C5A33B31D0E7118005D7109 /* MainViewController.m */,
 				5C5A33C01D0E957B005D7109 /* Youtube.h */,
 				5C5A33C11D0E957B005D7109 /* Youtube.m */,
+				5C4FEC0A1D0A6C2C00894E56 /* Supporting Files */,
+				5C5A33C31D112C9E005D7109 /* FirstScreenViewController.h */,
+				5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */,
+				5C5A33B21D0E7118005D7109 /* MainViewController.h */,
+				5C5A33B31D0E7118005D7109 /* MainViewController.m */,
 			);
 			path = KKPNews;
 			sourceTree = "<group>";
@@ -382,6 +387,7 @@
 				5C4FEC0F1D0A6C2C00894E56 /* AppDelegate.m in Sources */,
 				5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */,
 				5C4FEC0C1D0A6C2C00894E56 /* main.m in Sources */,
+				5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */,
 				5C5A33B41D0E7118005D7109 /* MainViewController.m in Sources */,
 				5C4FEC181D0A6C2C00894E56 /* KKPNews.xcdatamodeld in Sources */,
 				5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */,
