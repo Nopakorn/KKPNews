@@ -17,5 +17,12 @@
 @property (nonatomic, retain) NSDictionary *playerVars;
 @property (strong, nonatomic) Youtube *youtube;
 @property (nonatomic, retain) NSMutableArray *imageData;
-
+@property (weak, nonatomic) IBOutlet UISlider *progressSlider;
+@property (weak, nonatomic) IBOutlet UILabel *totalTime;
+@property (weak, nonatomic) IBOutlet UILabel *currentTime;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+- (IBAction)sliderValueChanged:(id)sender;
+- (IBAction)buttonPressed:(id)sender;
+@property (strong, nonatomic) NSTimer *timerProgress;
+@property (nonatomic) NSTimeInterval playerTotalTime;
 @end

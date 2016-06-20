@@ -20,6 +20,9 @@
 {
     BOOL receivedVideo;
     NSInteger item;
+    
+    BOOL isSeekForward;
+    BOOL isSeekBackward;
 }
 @synthesize youtube;
 
@@ -30,8 +33,7 @@
     [self.navigationController setNavigationBarHidden:YES];
     self.playerView.delegate = self;
     item = 0;
-
-    self.youtubeTableView.delegate = self;
+    
     self.youtubeTableView.dataSource = self;
     //self.youtube = [[Youtube alloc] init];
     //[self makeYoutubeData];
@@ -59,18 +61,110 @@
 #pragma YTPlayerView delegate
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
-     [self.playerView playVideo];
+    self.progressSlider.value = 0;
+    self.currentTime.text = @"00:00";
+    self.totalTime.text = @"00:00";
+     [self.progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.playerView playVideo];
 }
+
+
+- (IBAction)sliderValueChanged:(UISlider *)sender
+{
+//    [self hideNavWithFact:NO];
+//    [hideNavigation invalidate];
+//    hideNavigation = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hideNavigation) userInfo:nil repeats:NO];
+    NSInteger startTime = sender.value * self.playerTotalTime;
+    [self.timerProgress invalidate];
+    self.progressSlider.value = (double)startTime / self.playerTotalTime;
+    
+    double currentTimeChange = sender.value * self.playerTotalTime;
+    NSTimeInterval currentTimeInterval = currentTimeChange;
+    self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
+    
+    [self.playerView seekToSeconds:currentTimeChange allowSeekAhead:YES];
+}
+
+
+
+- (void)makeProgressBarMoving:(NSTimer *)timer
+{
+    float total = [self.progressSlider value];
+    double currentTime = [self.playerView currentTime];
+    NSTimeInterval currentTimeInterval = currentTime;
+    self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
+    
+    if (isSeekForward) {
+        if (total < 1) {
+            float playerCurrentTime = [self.playerView currentTime];
+            playerCurrentTime+=5;
+            self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+            [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
+            
+        } else {
+            [self.timerProgress invalidate];
+        }
+        
+    } else if (isSeekBackward){
+        if (total < 1) {
+            float playerCurrentTime = [self.playerView currentTime];
+            playerCurrentTime-=5;
+            self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+            [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
+            
+        } else {
+            [self.timerProgress invalidate];
+        }
+        
+    }else {
+        if (total < 1) {
+            float playerCurrentTime = [self.playerView currentTime];
+            self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+        } else {
+            [self.timerProgress invalidate];
+        }
+        
+    }
+}
+
+- (void)buttonPressed:(id)sender
+{
+    UIButton *btn = (UIButton *)sender;
+    if (sender == self.playButton) {
+        if ([btn.currentTitle isEqualToString:@"Play"]) {
+            [self.playerView playVideo];
+            [self.playButton setTitle:@"Pause" forState:UIControlStateNormal];
+        } else {
+            [self.playerView pauseVideo];
+            [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
+        }
+    }
+}
+
+
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
     if (state == kYTPlayerStateEnded) {
         item+=1;
+        [self.timerProgress invalidate];
         [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
         [self.youtubeTableView reloadData];
+        
     } else if (state == kYTPlayerStatePlaying) {
-        NSLog(@"--check time %@", [self stringFromTimeInterval:[self.playerView duration]]);
-        NSLog(@"--time from obj %@",[self.youtube.durationList objectAtIndex:item]);
+        [self.playButton setTitle:@"Pause" forState:UIControlStateNormal];
+        self.playerTotalTime = [self.playerView duration];
+        self.totalTime.text = [self stringFromTimeInterval:self.playerTotalTime];
+        double currentTime = [self.playerView currentTime];
+        NSTimeInterval currentTimeInterval = currentTime;
+        
+        self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
+        
+        self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
+
+    } else if (state == kYTPlayerStatePaused) {
+        [self.timerProgress invalidate];
+        [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
     }
 }
 
