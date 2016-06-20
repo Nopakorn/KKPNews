@@ -218,25 +218,31 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-    
-    for (NSDictionary* q in items) {
-        if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
-            [self.videoIdList addObject:q[@"contentDetails"][@"videoId"]];
-            [self.titleList addObject:q[@"snippet"][@"title"]];
-            [self.thumbnailList addObject:q[@"snippet"][@"thumbnails"][@"default"][@"url"]];
-            NSDate *dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
-            
-            NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
-                                    @"publishedAtList":dateFromString,
-                                    @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],
-                                    @"title":q[@"snippet"][@"title"] };
-            
-            [self.data addObject:data];
+    if ([items count] == 0) {
+        NSLog(@"no items %@",self.searchResults[@"etag"]);
+    } else {
+        for (NSDictionary* q in items) {
+            if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
+                [self.videoIdList addObject:q[@"contentDetails"][@"videoId"]];
+                [self.titleList addObject:q[@"snippet"][@"title"]];
+                [self.thumbnailList addObject:q[@"snippet"][@"thumbnails"][@"default"][@"url"]];
+                
+                NSDate *dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
+                NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
+                                        @"publishedAtList":dateFromString,
+                                        @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],
+                                        @"title":q[@"snippet"][@"title"] };
+                
+                [self.data addObject:data];
+                
+                
+            }
         }
     }
+    
+    
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
-
     //[self getVideoDurations:self.videoIdListForGetDuration];
 }
 

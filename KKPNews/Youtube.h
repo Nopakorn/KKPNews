@@ -42,6 +42,7 @@
 - (id)init;
 - (void)changeIndexNextPage:(int )newIndexNextPage;
 - (void)getChannelIdFromPlaylistName:(NSString *)playlistName;
+- (void)getVideoPlaylistFromUploadIds:(NSString *)uploadsId withNextPage:(BOOL)nextPage;
 - (void)getVideoDurations:(NSString *)videoId;
 
 @end

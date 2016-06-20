@@ -18,8 +18,10 @@
     NSInteger count;
     NSInteger countDuration;
     NSInteger item;
-    NSMutableArray *channelList;
+    NSMutableArray *channelListJP;
+    NSMutableArray *channelListEN;
     NSString *videoIdString;
+    BOOL jp;
 }
 
 - (void)viewDidLoad {
@@ -27,10 +29,18 @@
     [self.navigationController setNavigationBarHidden:YES];
     self.spinner.hidden = NO;
     [self.spinner startAnimating];
+    jp = YES;
+    if (jp) {
+        channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
+         count = [channelListJP count];
+    } else {
+         channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews"  @"UCCcey5CP5GDZeom987gqTdg", nil];
+         count = [channelListEN count];
+    }
     
-    channelList =[NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tvasahi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tbsnewsi", @"KyodoNews", @"asahicom", nil];
+   
     
-    count = [channelList count];
+   
     countDuration = 1;
     item = 0;
     videoIdString = @"";
@@ -51,9 +61,29 @@
 
 - (void)callYoutube
 {
-    for (int i = 0; i < [channelList count]; i++) {
-         [self.youtube getChannelIdFromPlaylistName:[channelList objectAtIndex:i]];
+    if (jp) {
+        for (int i = 0; i < [channelListJP count]; i++) {
+            if ( i == [channelListJP count]-1 ) {
+                [self.youtube getVideoPlaylistFromUploadIds:[channelListJP objectAtIndex:i] withNextPage:NO];
+            } else {
+                [self.youtube getChannelIdFromPlaylistName:[channelListJP objectAtIndex:i]];
+            }
+            
+        }
+    } else {
+        
+        for (int i = 0; i < [channelListEN count]; i++) {
+            if ( i == [channelListEN count]-1 ) {
+                [self.youtube getVideoPlaylistFromUploadIds:[channelListEN objectAtIndex:i] withNextPage:NO];
+            } else {
+                [self.youtube getChannelIdFromPlaylistName:[channelListEN objectAtIndex:i]];
+            }
+            
+        }
+        
     }
+    
+    
     //[self.youtube getChannelIdFromPlaylistName:[channelList objectAtIndex:item]];
 }
 
@@ -74,6 +104,7 @@
             
             NSString *reqVideoIds = @"";
             for (int i = 0; i < [self.youtube.data count]; i++) {
+                //NSLog(@"videoID: %@ publishedAt: %@", [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"], [[self.youtube.data objectAtIndex:i] objectForKey:@"publishedAtList"]);
                 reqVideoIds = [NSString stringWithFormat:@"%@,%@", reqVideoIds, [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"]];
             }
             
@@ -91,19 +122,24 @@
 {
     int start = (int)[self.youtube.durationList count];
     NSInteger lengthCall = countDuration * 50;
-   
-    
     NSArray *arrString = [reqVideoIds componentsSeparatedByString:@","];
-    NSString *newArr = @"";
-    for (int i = start; i < lengthCall; i++) {
-        newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
+    
+    if (lengthCall <= [arrString count]) {
+    
+        NSString *newArr = @"";
+        for (int i = start; i < lengthCall; i++) {
+            newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
+        }
+        
+        if ([newArr characterAtIndex:0] == ',') {
+            newArr = [newArr substringFromIndex:1];
+        }
+        
+        [self.youtube getVideoDurations:newArr];
+    } else {
+        [self receivedLoadVideoDuration];
     }
     
-    if ([newArr characterAtIndex:0] == ',') {
-        newArr = [newArr substringFromIndex:1];
-    }
-
-    [self.youtube getVideoDurations:newArr];
 
 }
 
@@ -111,12 +147,25 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         countDuration+=1;
-        if (countDuration == [channelList count]) {
-            [self performSegueWithIdentifier:@"mainSegue" sender:nil];
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+        NSLog(@"count %ld",(long)countDuration);
+        if (jp) {
+            
+            if (countDuration == [channelListJP count]) {
+                [self performSegueWithIdentifier:@"mainSegue" sender:nil];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+            } else {
+                [self callAllVideoDuration:videoIdString];
+            }
         } else {
-            [self callAllVideoDuration:videoIdString];
+            
+            if (countDuration == [channelListEN count]) {
+                [self performSegueWithIdentifier:@"mainSegue" sender:nil];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+            } else {
+                [self callAllVideoDuration:videoIdString];
+            }
         }
+        
        
     });
 }
