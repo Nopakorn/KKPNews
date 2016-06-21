@@ -218,6 +218,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+    
     if ([items count] == 0) {
         NSLog(@"no items %@",self.searchResults[@"etag"]);
     } else {

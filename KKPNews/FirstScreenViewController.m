@@ -104,7 +104,7 @@
             
             NSString *reqVideoIds = @"";
             for (int i = 0; i < [self.youtube.data count]; i++) {
-                //NSLog(@"videoID: %@ publishedAt: %@", [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"], [[self.youtube.data objectAtIndex:i] objectForKey:@"publishedAtList"]);
+//                NSLog(@"videoID: %@ publishedAt: %@", [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"], [[self.youtube.data objectAtIndex:i] objectForKey:@"publishedAtList"]);
                 reqVideoIds = [NSString stringWithFormat:@"%@,%@", reqVideoIds, [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"]];
             }
             

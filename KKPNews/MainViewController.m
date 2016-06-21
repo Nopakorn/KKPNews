@@ -35,6 +35,7 @@
     item = 0;
     
     self.youtubeTableView.dataSource = self;
+    self.youtubeTableView.delegate = self;
     //self.youtube = [[Youtube alloc] init];
     //[self makeYoutubeData];
     NSLog(@"Youtube count %lu",(unsigned long)[self.youtube.titleList count]);
