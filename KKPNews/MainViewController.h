@@ -11,6 +11,9 @@
 #import "Youtube.h"
 
 @interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource>
+{
+    UIActivityIndicatorView *spinner;
+}
 
 @property (strong, nonatomic) IBOutlet YTPlayerView *playerView;
 @property (weak, nonatomic) IBOutlet UITableView *youtubeTableView;
@@ -25,4 +28,15 @@
 - (IBAction)buttonPressed:(id)sender;
 @property (strong, nonatomic) NSTimer *timerProgress;
 @property (nonatomic) NSTimeInterval playerTotalTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *dateTimeLabel;
+
+@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
+
+- (IBAction)refeshButtonPressed:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
+
+@property (nonatomic) BOOL regionJp;
+
 @end

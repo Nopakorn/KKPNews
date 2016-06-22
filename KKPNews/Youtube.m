@@ -218,7 +218,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-    
+    NSDate *dateFromString;
     if ([items count] == 0) {
         NSLog(@"no items %@",self.searchResults[@"etag"]);
     } else {
@@ -228,7 +228,7 @@
                 [self.titleList addObject:q[@"snippet"][@"title"]];
                 [self.thumbnailList addObject:q[@"snippet"][@"thumbnails"][@"default"][@"url"]];
                 
-                NSDate *dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
+                dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
                 NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
                                         @"publishedAtList":dateFromString,
                                         @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],

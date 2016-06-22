@@ -21,8 +21,17 @@
     BOOL receivedVideo;
     NSInteger item;
     
+    
     BOOL isSeekForward;
     BOOL isSeekBackward;
+    
+    NSMutableArray *channelListJP;
+    NSMutableArray *channelListEN;
+    NSInteger count;
+    NSString *videoIdString;
+    NSInteger countDuration;
+    BOOL refreshFact;
+    BOOL spinnerFact;
 }
 @synthesize youtube;
 
@@ -36,16 +45,42 @@
     
     self.youtubeTableView.dataSource = self;
     self.youtubeTableView.delegate = self;
-    //self.youtube = [[Youtube alloc] init];
-    //[self makeYoutubeData];
-    NSLog(@"Youtube count %lu",(unsigned long)[self.youtube.titleList count]);
+    self.youtubeTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+    NSString *dateText = [NSString stringWithFormat:@"Date: %@",[dateFormatter stringFromDate:[NSDate date]]];
+    self.dateTimeLabel.text = dateText;
+    // will change later
+    self.regionJp = YES;
+    refreshFact = NO;
+    spinnerFact = NO;
+    self.loadingSpinner.hidden = YES;
     [self playlingYoutube];
+    
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 
 }
+# pragma oreintation
+- (void)orientationChanged:(NSNotification *)notification
+{
+    NSLog(@"oreintation changed");
+    if (spinnerFact) {
+       // spinner.center = CGPointMake(self.youtubeTableView.center.x, 85.5);
+    }
+}
+
 - (void)playlingYoutube
 {
     self.playerVars =  @{ @"playsinline" : @1,
@@ -56,6 +91,150 @@
     
     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
 }
+
+#pragma Call apis refresh
+- (void)callYoutube:(BOOL )jp
+{
+    [self.youtube.titleList removeAllObjects];
+    [self.youtube.videoIdList removeAllObjects];
+    [self.youtube.thumbnailList removeAllObjects];
+    [self.youtube.durationList removeAllObjects];
+    [self.youtube.data removeAllObjects];
+    [self.youtubeTableView reloadData];
+    self.youtube = [[Youtube alloc] init];
+    
+    refreshFact = YES;
+//    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    spinner.center = CGPointMake(self.youtubeTableView.center.x, 85.5);
+//    spinner.color = [UIColor blackColor];
+//    [self.youtubeTableView addSubview:spinner];
+//    [spinner startAnimating];
+    self.loadingSpinner.hidden = NO;
+    //spinnerFact = YES;
+    if (jp) {
+        channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
+        count = [channelListJP count];
+        countDuration = 1;
+        for (int i = 0; i < [channelListJP count]; i++) {
+            if ( i == [channelListJP count]-1 ) {
+                [self.youtube getVideoPlaylistFromUploadIds:[channelListJP objectAtIndex:i] withNextPage:NO];
+            } else {
+                [self.youtube getChannelIdFromPlaylistName:[channelListJP objectAtIndex:i]];
+            }
+            
+        }
+
+    } else {
+        channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews"  @"UCCcey5CP5GDZeom987gqTdg", nil];
+        count = [channelListEN count];
+        countDuration = 1;
+        for (int i = 0; i < [channelListEN count]; i++) {
+            if ( i == [channelListEN count]-1 ) {
+                [self.youtube getVideoPlaylistFromUploadIds:[channelListEN objectAtIndex:i] withNextPage:NO];
+            } else {
+                [self.youtube getChannelIdFromPlaylistName:[channelListEN objectAtIndex:i]];
+            }
+            
+        }
+
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedLoadVideoId)
+                                                 name:@"LoadVideoId" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedLoadVideoDuration)
+                                                 name:@"LoadVideoDuration" object:nil];
+}
+
+- (void)receivedLoadVideoId
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        count--;
+        item++;
+        if (count == 0) {
+            NSLog(@"all done objects = %lu", (unsigned long)[self.youtube.videoIdList count]);
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
+            
+            //sort
+            NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"publishedAtList" ascending:NO];
+            [self.youtube.data sortUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+            
+            NSString *reqVideoIds = @"";
+            for (int i = 0; i < [self.youtube.data count]; i++) {
+                reqVideoIds = [NSString stringWithFormat:@"%@,%@", reqVideoIds, [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"]];
+            }
+            
+            if ([reqVideoIds characterAtIndex:0] == ',') {
+                reqVideoIds = [reqVideoIds substringFromIndex:1];
+            }
+            
+            videoIdString = reqVideoIds;
+            [self callAllVideoDuration:videoIdString];
+        }
+    });
+    
+}
+
+- (void)callAllVideoDuration:(NSString *)reqVideoIds
+{
+    int start = (int)[self.youtube.durationList count];
+    NSInteger lengthCall = countDuration * 50;
+    NSArray *arrString = [reqVideoIds componentsSeparatedByString:@","];
+    
+    if (lengthCall <= [arrString count]) {
+        
+        NSString *newArr = @"";
+        for (int i = start; i < lengthCall; i++) {
+            newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
+        }
+        
+        if ([newArr characterAtIndex:0] == ',') {
+            newArr = [newArr substringFromIndex:1];
+        }
+        
+        [self.youtube getVideoDurations:newArr];
+    } else {
+        [self receivedLoadVideoDuration];
+    }
+    
+    
+}
+
+- (void)receivedLoadVideoDuration
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        countDuration+=1;
+        item = 0;
+        if (self.regionJp) {
+            
+            if (countDuration == [channelListJP count]) {
+                spinnerFact = NO;
+                self.loadingSpinner.hidden = YES;
+                [spinner stopAnimating];
+                [self.youtubeTableView reloadData];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+            } else {
+                [self callAllVideoDuration:videoIdString];
+            }
+        } else {
+            
+            if (countDuration == [channelListEN count]) {
+                spinnerFact = NO;
+                self.loadingSpinner.hidden = YES;
+                [spinner stopAnimating];
+                [self.youtubeTableView reloadData];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+            } else {
+                [self callAllVideoDuration:videoIdString];
+            }
+        }
+        
+        
+    });
+}
+
 
 
 
@@ -128,7 +307,16 @@
     }
 }
 
-- (void)buttonPressed:(id)sender
+- (IBAction)refeshButtonPressed:(id)sender
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+    NSString *dateText = [NSString stringWithFormat:@"Date: %@",[dateFormatter stringFromDate:[NSDate date]]];
+    self.dateTimeLabel.text = dateText;
+    [self callYoutube:self.regionJp];
+}
+
+- (IBAction)buttonPressed:(id)sender
 {
     UIButton *btn = (UIButton *)sender;
     if (sender == self.playButton) {
@@ -147,7 +335,13 @@
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
     if (state == kYTPlayerStateEnded) {
-        item+=1;
+        if (refreshFact) {
+            item = 0;
+            refreshFact = NO;
+        } else {
+            item+=1;
+        }
+        
         [self.timerProgress invalidate];
         [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
         [self.youtubeTableView reloadData];
@@ -162,7 +356,7 @@
         self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
         
         self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
-
+        
     } else if (state == kYTPlayerStatePaused) {
         [self.timerProgress invalidate];
         [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
@@ -180,7 +374,7 @@
     if ([self.youtube.data count] != 0) {
         return [self.youtube.data count];
     }else{
-        return 5;
+        return 0;
     }
    
 }
@@ -210,13 +404,15 @@
     } else {
         cell.name.text = @"";
     }
-    
-    if (indexPath.row == item) {
-        cell.contentView.backgroundColor = UIColorFromRGB(0xFFCCCC);
-    } else {
+    if (refreshFact) {
         cell.contentView.backgroundColor = [UIColor whiteColor];
+    } else {
+        if (indexPath.row == item) {
+            cell.contentView.backgroundColor = UIColorFromRGB(0xFFCCCC);
+        } else {
+            cell.contentView.backgroundColor = [UIColor whiteColor];
+        }
     }
-
     return cell;
 }
 
