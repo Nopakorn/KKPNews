@@ -26,11 +26,7 @@
 @property (nonatomic, copy) NSString *videoIdListForGetDuration;
 
 
-@property (nonatomic, retain) NSMutableArray *videoIdList;
-@property (nonatomic, retain) NSMutableArray *titleList;
-@property (nonatomic, retain) NSMutableArray *thumbnailList;
 @property (nonatomic, retain) NSMutableArray *durationList;
-@property (nonatomic, retain) NSMutableArray *publishedAtList;
 @property (nonatomic, retain) NSMutableArray *selectedType;
 @property (nonatomic, retain) NSMutableArray *data;
 

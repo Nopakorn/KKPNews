@@ -33,6 +33,7 @@
     BOOL refreshFact;
     BOOL spinnerFact;
 }
+
 @synthesize youtube;
 
 - (void)viewDidLoad {
@@ -75,7 +76,6 @@
 # pragma oreintation
 - (void)orientationChanged:(NSNotification *)notification
 {
-    NSLog(@"oreintation changed");
     if (spinnerFact) {
        // spinner.center = CGPointMake(self.youtubeTableView.center.x, 85.5);
     }
@@ -95,22 +95,14 @@
 #pragma Call apis refresh
 - (void)callYoutube:(BOOL )jp
 {
-    [self.youtube.titleList removeAllObjects];
-    [self.youtube.videoIdList removeAllObjects];
-    [self.youtube.thumbnailList removeAllObjects];
     [self.youtube.durationList removeAllObjects];
     [self.youtube.data removeAllObjects];
     [self.youtubeTableView reloadData];
     self.youtube = [[Youtube alloc] init];
     
     refreshFact = YES;
-//    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    spinner.center = CGPointMake(self.youtubeTableView.center.x, 85.5);
-//    spinner.color = [UIColor blackColor];
-//    [self.youtubeTableView addSubview:spinner];
-//    [spinner startAnimating];
     self.loadingSpinner.hidden = NO;
-    //spinnerFact = YES;
+    spinnerFact = YES;
     if (jp) {
         channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
         count = [channelListJP count];
@@ -154,7 +146,7 @@
         count--;
         item++;
         if (count == 0) {
-            NSLog(@"all done objects = %lu", (unsigned long)[self.youtube.videoIdList count]);
+            NSLog(@"all done objects = %lu", (unsigned long)[self.youtube.data count]);
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
             
             //sort
@@ -214,6 +206,14 @@
                 self.loadingSpinner.hidden = YES;
                 [spinner stopAnimating];
                 [self.youtubeTableView reloadData];
+                if (self.playerView.playerState == kYTPlayerStateEnded) {
+                    refreshFact = NO;
+                     NSLog(@"state: playing %ld",(long)self.playerView.playerState);
+                    [self.timerProgress invalidate];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                }
+                
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
             } else {
                 [self callAllVideoDuration:videoIdString];
@@ -225,6 +225,13 @@
                 self.loadingSpinner.hidden = YES;
                 [spinner stopAnimating];
                 [self.youtubeTableView reloadData];
+                if (self.playerView.playerState == kYTPlayerStateEnded) {
+                    refreshFact = NO;
+                    NSLog(@"state: playing %ld",(long)self.playerView.playerState);
+                    [self.timerProgress invalidate];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                }
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
             } else {
                 [self callAllVideoDuration:videoIdString];
@@ -335,16 +342,21 @@
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
     if (state == kYTPlayerStateEnded) {
-        if (refreshFact) {
-            item = 0;
-            refreshFact = NO;
+        if(spinnerFact){
+            NSLog(@"still loading");
         } else {
-            item+=1;
+            if (refreshFact) {
+                item = 0;
+                refreshFact = NO;
+            } else {
+                item+=1;
+            }
+
+            [self.timerProgress invalidate];
+            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+            [self.youtubeTableView reloadData];
         }
         
-        [self.timerProgress invalidate];
-        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-        [self.youtubeTableView reloadData];
         
     } else if (state == kYTPlayerStatePlaying) {
         [self.playButton setTitle:@"Pause" forState:UIControlStateNormal];
@@ -371,8 +383,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self.youtube.data count] != 0) {
-        return [self.youtube.data count];
+    if ([self.youtube.durationList count] != 0) {
+        return [self.youtube.durationList count];
     }else{
         return 0;
     }

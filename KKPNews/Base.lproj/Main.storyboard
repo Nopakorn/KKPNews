@@ -181,12 +181,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="89" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kkv-kZ-WIY">
                                 <rect key="frame" x="0.0" y="348" width="600" height="252"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="Xpy-lw-uk6">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="37"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                </activityIndicatorView>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Xpy-lw-uk6">
+                                <rect key="frame" x="282" y="456" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ptc-Nz-TG0" userLabel="Date Area">
                                 <rect key="frame" x="0.0" y="324" width="600" height="24"/>
                                 <subviews>
@@ -242,9 +241,11 @@
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="5RP-0e-y90"/>
                             <constraint firstItem="Ptc-Nz-TG0" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="6L4-B6-uJa"/>
                             <constraint firstItem="QU5-yG-pLC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="6XZ-AT-q6Q"/>
+                            <constraint firstItem="Xpy-lw-uk6" firstAttribute="centerX" secondItem="kkv-kZ-WIY" secondAttribute="centerX" id="6aV-YS-7Ft"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="QU5-yG-pLC" secondAttribute="bottom" constant="41" id="7rV-qi-saR"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="leading" secondItem="QU5-yG-pLC" secondAttribute="trailing" id="Dx8-5B-CFV"/>
                             <constraint firstItem="RMw-rs-02i" firstAttribute="top" secondItem="QU5-yG-pLC" secondAttribute="bottom" id="Ecd-Dh-nWm"/>
+                            <constraint firstItem="Xpy-lw-uk6" firstAttribute="centerY" secondItem="kkv-kZ-WIY" secondAttribute="centerY" id="Egq-sD-wAq"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="bottom" constant="-2" id="FZj-G9-Y8c"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="kkv-kZ-WIY" secondAttribute="bottom" id="Hpd-lx-6Zp"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="bottom" constant="-2" id="JyV-NV-10Z"/>
@@ -279,9 +280,6 @@
                                 <exclude reference="Ecd-Dh-nWm"/>
                                 <exclude reference="SZz-bK-ly8"/>
                                 <exclude reference="aY6-9d-sVr"/>
-                                <exclude reference="Hpd-lx-6Zp"/>
-                                <exclude reference="XDb-wC-dZ3"/>
-                                <exclude reference="Yq7-iq-FKS"/>
                                 <exclude reference="6L4-B6-uJa"/>
                                 <exclude reference="Prj-08-aQO"/>
                                 <exclude reference="XvE-t4-BPr"/>
@@ -298,6 +296,9 @@
                                 <exclude reference="n3j-Cv-bgc"/>
                                 <exclude reference="oHu-wC-xuC"/>
                                 <exclude reference="tEH-jn-PyL"/>
+                                <exclude reference="Hpd-lx-6Zp"/>
+                                <exclude reference="XDb-wC-dZ3"/>
+                                <exclude reference="Yq7-iq-FKS"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=compact">
@@ -306,8 +307,6 @@
                                 <include reference="Ecd-Dh-nWm"/>
                                 <exclude reference="YSV-1R-8jb"/>
                                 <exclude reference="lcX-WJ-a2m"/>
-                                <include reference="XDb-wC-dZ3"/>
-                                <exclude reference="Yq7-iq-FKS"/>
                                 <include reference="6L4-B6-uJa"/>
                                 <include reference="Prj-08-aQO"/>
                                 <exclude reference="V5b-Ro-ucC"/>
@@ -321,6 +320,8 @@
                                 <include reference="lcN-rA-pA4"/>
                                 <include reference="oHu-wC-xuC"/>
                                 <exclude reference="uxE-Kk-AUW"/>
+                                <include reference="XDb-wC-dZ3"/>
+                                <exclude reference="Yq7-iq-FKS"/>
                             </mask>
                         </variation>
                     </view>

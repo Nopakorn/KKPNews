@@ -91,11 +91,9 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSLog(@"count id %lu and thumbnail %lu and duration %lu", (unsigned long)[self.youtube.videoIdList count], (unsigned long)[self.youtube.thumbnailList count], (unsigned long)[self.youtube.durationList count]);
         count--;
         item++;
         if (count == 0) {
-            NSLog(@"all done objects = %lu", (unsigned long)[self.youtube.videoIdList count]);
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
             
             //sort

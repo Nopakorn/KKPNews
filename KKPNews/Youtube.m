@@ -22,11 +22,7 @@
     if(self = [super init]){
         //will change later
         self.siteURLString = [NSString stringWithFormat:@"http://www.googleapis.com/youtube/v3/"];
-        self.videoIdList = [[NSMutableArray alloc] initWithCapacity:10];
-        self.thumbnailList = [[NSMutableArray alloc] initWithCapacity:10];
-        self.titleList = [[NSMutableArray alloc] initWithCapacity:10];
         self.durationList = [[NSMutableArray alloc] initWithCapacity:10];
-        self.publishedAtList = [[NSMutableArray alloc] initWithCapacity:10];
         self.data = [[NSMutableArray alloc] initWithCapacity:10];
         self.search = @"search?";
         self.video = @"video?";
@@ -47,36 +43,6 @@
 }
 
 #pragma new method
-- (void)getAllChannelIdFromList:(NSMutableArray *)channelList
-{
-//    NSMutableArray *multiReq = [[NSMutableArray alloc] initWithCapacity:10];
-//    NSString* urlString;
-//    for (int i = 0; i < [channelList count]; i++) {
-//         urlString = [NSString stringWithFormat:@"https://www.googleapis.com/youtube/v3/channels?part=id%%2Csnippet%%2CcontentDetails&forUsername=%@&key=%@", [channelList objectAtIndex:i] ,self.youtube_api_key];
-//        [multiReq addObject:urlString];
-//    }
-//    
-//    NSInteger count = [multiReq count];
-//    for (NSString *urlString in multiReq) {
-//        
-//        NSURL *url = [[NSURL alloc] initWithString:urlString];
-//        NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-//        [req setHTTPMethod:@"GET"];
-//        
-//        NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-//        [[session dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
-//            if(!error)
-//            {
-//                
-//                if (count == 0) {
-//                    
-//                }
-//            }
-//        }] resume];
-//
-//    }
-}
-
 - (void)getChannelIdFromPlaylistName:(NSString *)playlistName
 {
      NSString* urlString;
@@ -111,65 +77,27 @@
 
 - (void)getVideoPlaylistFromUploadIds:(NSString *)uploadsId withNextPage:(BOOL)nextPage
 {
-    if (nextPage) {
-
-        NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/youtube/v3/playlistItems?part=id%%2Csnippet%%2CcontentDetails&maxResults=50&playlistId=%@&key=%@", uploadsId, self.youtube_api_key];
+    NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/youtube/v3/playlistItems?part=id%%2Csnippet%%2CcontentDetails&maxResults=50&playlistId=%@&key=%@", uploadsId, self.youtube_api_key];
         
-        NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
         
-        NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
         
-        [req setHTTPMethod:@"GET"];
+    [req setHTTPMethod:@"GET"];
         
-        NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        [[session dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
-            if(!error)
-            {
-                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-                self.searchResults = json;
-                checkResult = @"LoadVideoIdNextPage";
-                [self fetchVideos:nextPage];
-                
-            }else{
-                if (self.titleList > self.durationList) {
-                    for (NSInteger i = [self.durationList count]; i < [self.titleList count]; i++) {
-                        [self.titleList removeObjectAtIndex:i];
-                        [self.videoIdList removeObjectAtIndex:i];
-                        [self.thumbnailList removeObjectAtIndex:i];
-                    }
-                }
-                NSLog(@"%@",error);
-                
-            }
+    NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
+        if(!error)
+        {
+            NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+            self.searchResults = json;
+            checkResult = @"LoadVideoId";
+            [self fetchVideos:nextPage];
+        }else{
+            NSLog(@"%@",error);
+        }
             
-        }] resume];
-        
-    } else {
-        
-        NSString* urlString = [NSString stringWithFormat:@"https://www.googleapis.com/youtube/v3/playlistItems?part=id%%2Csnippet%%2CcontentDetails&maxResults=50&playlistId=%@&key=%@", uploadsId, self.youtube_api_key];
-        
-        NSURL *url = [[NSURL alloc] initWithString:urlString];
-        
-        NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-        
-        [req setHTTPMethod:@"GET"];
-        
-        NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        [[session dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
-            if(!error)
-            {
-                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-                self.searchResults = json;
-                checkResult = @"LoadVideoId";
-                [self fetchVideos:nextPage];
-            }else{
-                NSLog(@"%@",error);
-            }
-            
-        }] resume];
-    }
-    
-    
+    }] resume];
 
 }
 
@@ -224,9 +152,6 @@
     } else {
         for (NSDictionary* q in items) {
             if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
-                [self.videoIdList addObject:q[@"contentDetails"][@"videoId"]];
-                [self.titleList addObject:q[@"snippet"][@"title"]];
-                [self.thumbnailList addObject:q[@"snippet"][@"thumbnails"][@"default"][@"url"]];
                 
                 dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
                 NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
