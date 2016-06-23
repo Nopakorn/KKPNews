@@ -24,6 +24,7 @@
         self.siteURLString = [NSString stringWithFormat:@"http://www.googleapis.com/youtube/v3/"];
         self.durationList = [[NSMutableArray alloc] initWithCapacity:10];
         self.data = [[NSMutableArray alloc] initWithCapacity:10];
+        self.jsonRes = [[NSMutableArray alloc] initWithCapacity:10];
         self.search = @"search?";
         self.video = @"video?";
         self.youtube_api_key = @"AIzaSyAPT3PRTZdTQDdoOtwviiC0FQPpJvfQlWE";
@@ -91,8 +92,12 @@
         {
             NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
             self.searchResults = json;
+            if (json[@"items"] != nil) {
+                [self.jsonRes addObject:json];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
             checkResult = @"LoadVideoId";
-            [self fetchVideos:nextPage];
+            //[self fetchVideos:nextPage];
         }else{
             NSLog(@"%@",error);
         }
@@ -165,8 +170,6 @@
             }
         }
     }
-    
-    
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
     //[self getVideoDurations:self.videoIdListForGetDuration];

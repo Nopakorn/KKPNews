@@ -70,6 +70,11 @@
             }
             
         }
+//        if ( item == [channelListJP count]-1 ) {
+//            [self.youtube getVideoPlaylistFromUploadIds:[channelListJP objectAtIndex:item] withNextPage:NO];
+//        } else {
+//            [self.youtube getChannelIdFromPlaylistName:[channelListJP objectAtIndex:item]];
+//        }
     } else {
         
         for (int i = 0; i < [channelListEN count]; i++) {
@@ -82,8 +87,7 @@
         }
         
     }
-    
-    
+
     //[self.youtube getChannelIdFromPlaylistName:[channelList objectAtIndex:item]];
 }
 
@@ -94,6 +98,26 @@
         count--;
         item++;
         if (count == 0) {
+            NSLog(@"what we got --- ");
+            //NSLog(@"%@",self.youtube.jsonRes);
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+            NSDate *dateFromString;
+            for (NSDictionary* a in self.youtube.jsonRes) {
+                NSArray *arr = a[@"items"];
+                for (NSDictionary* q in arr) {
+                    if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
+                        
+                        dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
+                        NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
+                                                @"publishedAtList":dateFromString,
+                                                @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],
+                                                @"title":q[@"snippet"][@"title"] };
+                        
+                        [self.youtube.data addObject:data];
+                    }
+                }
+            }
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
             
             //sort
@@ -111,6 +135,8 @@
             }
             videoIdString = reqVideoIds;
             [self callAllVideoDuration:videoIdString];
+        } else {
+            //[self callYoutube];
         }
     });
     
@@ -163,8 +189,7 @@
                 [self callAllVideoDuration:videoIdString];
             }
         }
-        
-       
+
     });
 }
 

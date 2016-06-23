@@ -29,6 +29,8 @@
 @property (nonatomic, retain) NSMutableArray *durationList;
 @property (nonatomic, retain) NSMutableArray *selectedType;
 @property (nonatomic, retain) NSMutableArray *data;
+@property (nonatomic, retain) NSMutableArray *jsonRes;
+
 
 @property (nonatomic, retain) NSDictionary *searchResults;
 

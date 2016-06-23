@@ -146,9 +146,26 @@
         count--;
         item++;
         if (count == 0) {
-            NSLog(@"all done objects = %lu", (unsigned long)[self.youtube.data count]);
+            //new ways--
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+            NSDate *dateFromString;
+            for (NSDictionary* a in self.youtube.jsonRes) {
+                NSArray *arr = a[@"items"];
+                for (NSDictionary* q in arr) {
+                    if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
+                        
+                        dateFromString = [dateFormatter dateFromString:q[@"snippet"][@"publishedAt"]];
+                        NSDictionary *data = @{ @"videoId":q[@"contentDetails"][@"videoId"],
+                                                @"publishedAtList":dateFromString,
+                                                @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],
+                                                @"title":q[@"snippet"][@"title"] };
+                        
+                        [self.youtube.data addObject:data];
+                    }
+                }
+            }
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
-            
             //sort
             NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"publishedAtList" ascending:NO];
             [self.youtube.data sortUsingDescriptors:[NSArray arrayWithObject:descriptor]];
@@ -203,12 +220,12 @@
             
             if (countDuration == [channelListJP count]) {
                 spinnerFact = NO;
+                refreshFact = NO;
                 self.loadingSpinner.hidden = YES;
                 [spinner stopAnimating];
                 [self.youtubeTableView reloadData];
                 if (self.playerView.playerState == kYTPlayerStateEnded) {
-                    refreshFact = NO;
-                     NSLog(@"state: playing %ld",(long)self.playerView.playerState);
+                    NSLog(@"state: playing %ld",(long)self.playerView.playerState);
                     [self.timerProgress invalidate];
                     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
                     [self.youtubeTableView reloadData];
@@ -222,11 +239,11 @@
             
             if (countDuration == [channelListEN count]) {
                 spinnerFact = NO;
+                refreshFact = NO;
                 self.loadingSpinner.hidden = YES;
                 [spinner stopAnimating];
                 [self.youtubeTableView reloadData];
                 if (self.playerView.playerState == kYTPlayerStateEnded) {
-                    refreshFact = NO;
                     NSLog(@"state: playing %ld",(long)self.playerView.playerState);
                     [self.timerProgress invalidate];
                     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
@@ -316,11 +333,14 @@
 
 - (IBAction)refeshButtonPressed:(id)sender
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
-    NSString *dateText = [NSString stringWithFormat:@"Date: %@",[dateFormatter stringFromDate:[NSDate date]]];
-    self.dateTimeLabel.text = dateText;
-    [self callYoutube:self.regionJp];
+    if (!spinnerFact) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+        NSString *dateText = [NSString stringWithFormat:@"Date: %@",[dateFormatter stringFromDate:[NSDate date]]];
+        self.dateTimeLabel.text = dateText;
+        [self callYoutube:self.regionJp];
+    }
+
 }
 
 - (IBAction)buttonPressed:(id)sender
@@ -336,8 +356,6 @@
         }
     }
 }
-
-
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
@@ -372,6 +390,24 @@
     } else if (state == kYTPlayerStatePaused) {
         [self.timerProgress invalidate];
         [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
+        
+    } else if (state == kYTPlayerStateUnstarted) {
+        
+        if(spinnerFact){
+            NSLog(@"still loading");
+        } else {
+            if (refreshFact) {
+                item = 0;
+                refreshFact = NO;
+            } else {
+                item+=1;
+            }
+            
+            [self.timerProgress invalidate];
+            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+            [self.youtubeTableView reloadData];
+        }
+
     }
 }
 
@@ -384,6 +420,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([self.youtube.durationList count] != 0) {
+        //return 50;
         return [self.youtube.durationList count];
     }else{
         return 0;
