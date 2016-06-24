@@ -28,6 +28,7 @@
 		5CDC288D1D1D2342002B4454 /* Tutorial3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28871D1D2342002B4454 /* Tutorial3ViewController.m */; };
 		5CDC288E1D1D2342002B4454 /* Tutorial4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */; };
 		5CDC28911D1D2399002B4454 /* tutorial in Resources */ = {isa = PBXBuildFile; fileRef = 5CDC28901D1D2399002B4454 /* tutorial */; };
+		5CDC28971D1D3167002B4454 /* CustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28961D1D3167002B4454 /* CustomSlider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +90,8 @@
 		5CDC28881D1D2342002B4454 /* Tutorial4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial4ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial4ViewController.h"; sourceTree = "<group>"; };
 		5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial4ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial4ViewController.m"; sourceTree = "<group>"; };
 		5CDC28901D1D2399002B4454 /* tutorial */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tutorial; path = "/Users/ssd/Documents/Youtube-Feed/Youtube-Feed/../../../Desktop/tutorial"; sourceTree = "<absolute>"; };
+		5CDC28951D1D3167002B4454 /* CustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSlider.h; sourceTree = "<group>"; };
+		5CDC28961D1D3167002B4454 /* CustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSlider.m; sourceTree = "<group>"; };
 		8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.release.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.release.xcconfig"; sourceTree = "<group>"; };
 		9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -163,6 +166,8 @@
 				5C5A33B21D0E7118005D7109 /* MainViewController.h */,
 				5C5A33B31D0E7118005D7109 /* MainViewController.m */,
 				5CDC28781D1CEAA4002B4454 /* localizable.strings */,
+				5CDC28951D1D3167002B4454 /* CustomSlider.h */,
+				5CDC28961D1D3167002B4454 /* CustomSlider.m */,
 			);
 			path = KKPNews;
 			sourceTree = "<group>";
@@ -435,6 +440,7 @@
 				5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */,
 				5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */,
 				5C4FEC0C1D0A6C2C00894E56 /* main.m in Sources */,
+				5CDC28971D1D3167002B4454 /* CustomSlider.m in Sources */,
 				5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */,
 				5C5A33B41D0E7118005D7109 /* MainViewController.m in Sources */,
 				5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */,

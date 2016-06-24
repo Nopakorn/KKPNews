@@ -78,9 +78,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-rs-02i" userLabel="Controller Area">
                                 <rect key="frame" x="0.0" y="280" width="600" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F81-Bt-NyY">
-                                        <rect key="frame" x="18" y="6" width="30" height="30"/>
-                                        <state key="normal" title="Play"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F81-Bt-NyY">
+                                        <rect key="frame" x="18" y="10" width="23" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="23" id="ej9-KG-aWJ"/>
+                                            <constraint firstAttribute="height" constant="25" id="f7u-pR-ao2"/>
+                                        </constraints>
+                                        <state key="normal" image="play"/>
                                         <connections>
                                             <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xgc-WQ-j3r"/>
                                         </connections>
@@ -103,17 +107,17 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ExT-2O-BK6">
                                         <rect key="frame" x="303" y="15" width="34" height="15"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veb-2w-LCA">
                                         <rect key="frame" x="548" y="15" width="34" height="15"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="lPY-PT-uNr" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="top" constant="6" id="38g-W1-XQb"/>
                                     <constraint firstItem="veb-2w-LCA" firstAttribute="leading" secondItem="lPY-PT-uNr" secondAttribute="trailing" constant="8" id="5U2-4D-SI8"/>
@@ -135,7 +139,7 @@
                                     <constraint firstAttribute="width" constant="400" id="hmr-hW-Nuf"/>
                                     <constraint firstAttribute="bottom" secondItem="lPY-PT-uNr" secondAttribute="bottom" constant="84" id="pnw-nb-Yu5"/>
                                     <constraint firstAttribute="height" constant="44" id="sJe-Py-0gN"/>
-                                    <constraint firstItem="F81-Bt-NyY" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="top" constant="6" id="v5c-jK-d4Y"/>
+                                    <constraint firstItem="F81-Bt-NyY" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="top" constant="10" id="v5c-jK-d4Y"/>
                                     <constraint firstItem="veb-2w-LCA" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="top" constant="15" id="x4A-f6-YkY"/>
                                 </constraints>
                                 <variation key="default">
@@ -197,12 +201,13 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jfR-NK-5rO">
-                                        <rect key="frame" x="545" y="-3" width="47" height="28"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jfR-NK-5rO">
+                                        <rect key="frame" x="568" y="0.0" width="24" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="Refresh">
+                                        <state key="normal" image="refresh">
                                             <color key="titleColor" red="1" green="0.66225734759751587" blue="0.42948999647548647" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <variation key="widthClass=compact"/>
                                         <connections>
                                             <action selector="refeshButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qFR-Xj-sa6"/>
                                         </connections>
@@ -212,7 +217,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="bAP-Lj-lEC"/>
                                     <constraint firstItem="rDO-Ni-ahO" firstAttribute="centerX" secondItem="Ptc-Nz-TG0" secondAttribute="centerX" id="pk9-B1-c7c"/>
-                                    <constraint firstItem="jfR-NK-5rO" firstAttribute="top" secondItem="Ptc-Nz-TG0" secondAttribute="top" constant="-3" id="q3P-y5-w3v"/>
+                                    <constraint firstItem="jfR-NK-5rO" firstAttribute="top" secondItem="Ptc-Nz-TG0" secondAttribute="top" id="q3P-y5-w3v"/>
                                     <constraint firstItem="rDO-Ni-ahO" firstAttribute="centerY" secondItem="Ptc-Nz-TG0" secondAttribute="centerY" id="sWP-Mp-giY"/>
                                     <constraint firstAttribute="trailing" secondItem="jfR-NK-5rO" secondAttribute="trailing" constant="8" id="zwd-bv-Z7K"/>
                                 </constraints>
@@ -727,6 +732,8 @@
         <image name="circle_3" width="147" height="19"/>
         <image name="circle_4" width="147" height="19"/>
         <image name="nextButtonTutorial" width="21" height="31"/>
+        <image name="play" width="23" height="25"/>
         <image name="prevButtonTutorial" width="20" height="31"/>
+        <image name="refresh" width="24" height="24"/>
     </resources>
 </document>

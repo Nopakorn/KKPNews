@@ -59,7 +59,18 @@
     self.loadingSpinner.hidden = YES;
     [self playlingYoutube];
     
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+//    UIImage *new = [UIImage imageNamed:@"thumbnail.png"];
+//    UIImage *myNewThumbnail = [MainViewController imageWithImage:new scaledToSize:CGSizeMake(20, 20)];
+//    [self.progressSlider setThumbImage:myNewThumbnail forState:UIControlStateNormal];
+    UIImage *minImage = [[UIImage imageNamed:@"min"] stretchableImageWithLeftCapWidth:9 topCapHeight:0];
+    UIImage *maxImage = [[UIImage imageNamed:@"max"] stretchableImageWithLeftCapWidth:9 topCapHeight:0];
+    minImage = [MainViewController imageWithImage:minImage scaledToSize:CGSizeMake(3, 3)];
+    maxImage = [MainViewController imageWithImage:maxImage scaledToSize:CGSizeMake(3, 3)];
+    [self.progressSlider setMinimumTrackImage:minImage forState:UIControlStateNormal];
+    [self.progressSlider setMaximumTrackImage:maxImage forState:UIControlStateNormal];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -73,6 +84,16 @@
     [super didReceiveMemoryWarning];
 
 }
+# pragma resize image
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 # pragma oreintation
 - (void)orientationChanged:(NSNotification *)notification
 {
@@ -348,13 +369,16 @@
 - (IBAction)buttonPressed:(id)sender
 {
     UIButton *btn = (UIButton *)sender;
+    UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
+    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
     if (sender == self.playButton) {
-        if ([btn.currentTitle isEqualToString:@"Play"]) {
+        if ([[self.playButton imageForState:UIControlStateNormal] isEqual:btnImagePlay]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Playback Started" object:self];
             [self.playerView playVideo];
-            [self.playButton setTitle:@"Pause" forState:UIControlStateNormal];
+            [self.playButton setImage:btnImagePause forState:UIControlStateNormal];
         } else {
             [self.playerView pauseVideo];
-            [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
+            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
         }
     }
 }
@@ -380,7 +404,8 @@
         
         
     } else if (state == kYTPlayerStatePlaying) {
-        [self.playButton setTitle:@"Pause" forState:UIControlStateNormal];
+        UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
+        [self.playButton setImage:btnImagePause forState:UIControlStateNormal];
         self.playerTotalTime = [self.playerView duration];
         self.totalTime.text = [self stringFromTimeInterval:self.playerTotalTime];
         double currentTime = [self.playerView currentTime];
@@ -393,7 +418,8 @@
         
     } else if (state == kYTPlayerStatePaused) {
         [self.timerProgress invalidate];
-        [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
+        UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+        [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
         
     } else if (state == kYTPlayerStateUnstarted) {
         
@@ -471,7 +497,7 @@
         cell.contentView.backgroundColor = [UIColor whiteColor];
     } else {
         if (indexPath.row == item) {
-            cell.contentView.backgroundColor = UIColorFromRGB(0xFFCCCC);
+            cell.contentView.backgroundColor = UIColorFromRGB(0xDADADA);
         } else {
             cell.contentView.backgroundColor = [UIColor whiteColor];
         }
