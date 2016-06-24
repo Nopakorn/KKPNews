@@ -34,7 +34,8 @@
     NSLocale *currentLocale = [NSLocale currentLocale];
     NSString *region = [currentLocale objectForKey:NSLocaleCountryCode];
     NSLog(@"region code %@",region);
-    if ([region isEqualToString:@"ja-JP"]) {
+    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"tutorialPass"];
+    if ([region isEqualToString:@"JP"]) {
         jp = YES;
     } else {
         jp = NO;
@@ -42,27 +43,38 @@
     
     if (jp) {
         channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
-         count = [channelListJP count];
+        count = [channelListJP count];
     } else {
-         channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews"  @"UCCcey5CP5GDZeom987gqTdg", nil];
-         count = [channelListEN count];
+        channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews"  @"UCCcey5CP5GDZeom987gqTdg", nil];
+        count = [channelListEN count];
     }
     
-   
-    
-   
     countDuration = 1;
     item = 0;
     videoIdString = @"";
-    self.youtube = [[Youtube alloc] init];
-    [self callYoutube];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedLoadVideoId)
-                                                 name:@"LoadVideoId" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedLoadVideoDuration)
-                                                 name:@"LoadVideoDuration" object:nil];
+
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"tutorialPass"]) {
+        
+        self.youtube = [[Youtube alloc] init];
+        [self callYoutube];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedLoadVideoId)
+                                                     name:@"LoadVideoId" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedLoadVideoDuration)
+                                                     name:@"LoadVideoDuration" object:nil];
+        
+    } else {
+        [self performSegueWithIdentifier:@"TutorialPhase" sender:@0];
+    }
+
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

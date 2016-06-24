@@ -22,6 +22,12 @@
 		5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C11D0E957B005D7109 /* Youtube.m */; };
 		5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */; };
 		5CDC28761D1CEAA4002B4454 /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CDC28781D1CEAA4002B4454 /* localizable.strings */; };
+		5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */; };
+		5CDC288B1D1D2342002B4454 /* Tutorial2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28831D1D2342002B4454 /* Tutorial2ViewController.m */; };
+		5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */; };
+		5CDC288D1D1D2342002B4454 /* Tutorial3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28871D1D2342002B4454 /* Tutorial3ViewController.m */; };
+		5CDC288E1D1D2342002B4454 /* Tutorial4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */; };
+		5CDC28911D1D2399002B4454 /* tutorial in Resources */ = {isa = PBXBuildFile; fileRef = 5CDC28901D1D2399002B4454 /* tutorial */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +78,17 @@
 		5CDC287B1D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/localizable.strings; sourceTree = "<group>"; };
 		5CDC287D1D1CEB7B002B4454 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/localizable.strings; sourceTree = "<group>"; };
 		5CDC287E1D1CECFF002B4454 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/localizable.strings; sourceTree = "<group>"; };
+		5CDC28801D1D2342002B4454 /* TutorialNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialNavigationController.h; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.h"; sourceTree = "<group>"; };
+		5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialNavigationController.m; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.m"; sourceTree = "<group>"; };
+		5CDC28821D1D2342002B4454 /* Tutorial2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial2ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial2ViewController.h"; sourceTree = "<group>"; };
+		5CDC28831D1D2342002B4454 /* Tutorial2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial2ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial2ViewController.m"; sourceTree = "<group>"; };
+		5CDC28841D1D2342002B4454 /* Tutorial1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial1ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial1ViewController.h"; sourceTree = "<group>"; };
+		5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial1ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial1ViewController.m"; sourceTree = "<group>"; };
+		5CDC28861D1D2342002B4454 /* Tutorial3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial3ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial3ViewController.h"; sourceTree = "<group>"; };
+		5CDC28871D1D2342002B4454 /* Tutorial3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial3ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial3ViewController.m"; sourceTree = "<group>"; };
+		5CDC28881D1D2342002B4454 /* Tutorial4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial4ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial4ViewController.h"; sourceTree = "<group>"; };
+		5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial4ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial4ViewController.m"; sourceTree = "<group>"; };
+		5CDC28901D1D2399002B4454 /* tutorial */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tutorial; path = "/Users/ssd/Documents/Youtube-Feed/Youtube-Feed/../../../Desktop/tutorial"; sourceTree = "<absolute>"; };
 		8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.release.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.release.xcconfig"; sourceTree = "<group>"; };
 		9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,6 +144,8 @@
 		5C4FEC091D0A6C2C00894E56 /* KKPNews */ = {
 			isa = PBXGroup;
 			children = (
+				5CDC28901D1D2399002B4454 /* tutorial */,
+				5CDC288F1D1D234F002B4454 /* TutorialViews */,
 				5C5A33BC1D0E78CE005D7109 /* Views */,
 				5C5A33B51D0E75EA005D7109 /* CustomCells */,
 				5C4FEC0D1D0A6C2C00894E56 /* AppDelegate.h */,
@@ -189,6 +208,23 @@
 				5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		5CDC288F1D1D234F002B4454 /* TutorialViews */ = {
+			isa = PBXGroup;
+			children = (
+				5CDC28801D1D2342002B4454 /* TutorialNavigationController.h */,
+				5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */,
+				5CDC28821D1D2342002B4454 /* Tutorial2ViewController.h */,
+				5CDC28831D1D2342002B4454 /* Tutorial2ViewController.m */,
+				5CDC28841D1D2342002B4454 /* Tutorial1ViewController.h */,
+				5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */,
+				5CDC28861D1D2342002B4454 /* Tutorial3ViewController.h */,
+				5CDC28871D1D2342002B4454 /* Tutorial3ViewController.m */,
+				5CDC28881D1D2342002B4454 /* Tutorial4ViewController.h */,
+				5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */,
+			);
+			name = TutorialViews;
 			sourceTree = "<group>";
 		};
 		76F10EF439F0FCA3AE4FD790 /* Frameworks */ = {
@@ -318,6 +354,7 @@
 			files = (
 				5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */,
 				5CDC28761D1CEAA4002B4454 /* localizable.strings in Resources */,
+				5CDC28911D1D2399002B4454 /* tutorial in Resources */,
 				5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */,
 				5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */,
 				5C4FEC151D0A6C2C00894E56 /* Main.storyboard in Resources */,
@@ -393,13 +430,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CDC288D1D1D2342002B4454 /* Tutorial3ViewController.m in Sources */,
 				5C4FEC0F1D0A6C2C00894E56 /* AppDelegate.m in Sources */,
+				5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */,
 				5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */,
 				5C4FEC0C1D0A6C2C00894E56 /* main.m in Sources */,
 				5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */,
 				5C5A33B41D0E7118005D7109 /* MainViewController.m in Sources */,
+				5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */,
+				5CDC288B1D1D2342002B4454 /* Tutorial2ViewController.m in Sources */,
 				5C4FEC181D0A6C2C00894E56 /* KKPNews.xcdatamodeld in Sources */,
 				5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */,
+				5CDC288E1D1D2342002B4454 /* Tutorial4ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

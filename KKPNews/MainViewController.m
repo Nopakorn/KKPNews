@@ -296,7 +296,7 @@
     double currentTime = [self.playerView currentTime];
     NSTimeInterval currentTimeInterval = currentTime;
     self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
-//     NSLog(@"timecheck :%@",[self stringFromTimeInterval:currentTimeInterval]);
+
     if (isSeekForward) {
         if (total < 1) {
             float playerCurrentTime = [self.playerView currentTime];
@@ -304,7 +304,7 @@
             self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
             [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
         } else {
-            NSLog(@">1");
+
             [self.timerProgress invalidate];
         }
         
@@ -316,7 +316,7 @@
             [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
             
         } else {
-            NSLog(@">1");
+
             [self.timerProgress invalidate];
         }
         
@@ -324,8 +324,8 @@
         if (total < 1) {
             float playerCurrentTime = [self.playerView currentTime];
             self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+            self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
         } else {
-            NSLog(@"<1 what ?");
             [self.timerProgress invalidate];
         }
         
@@ -361,7 +361,7 @@
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
-    NSLog(@"what state == %ld",(long)self.playerView.playerState);
+
     if (state == kYTPlayerStateEnded) {
         if(spinnerFact){
             NSLog(@"still loading");
