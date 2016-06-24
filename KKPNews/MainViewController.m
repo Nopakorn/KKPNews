@@ -50,10 +50,10 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
-    NSString *dateText = [NSString stringWithFormat:@"Date: %@",[dateFormatter stringFromDate:[NSDate date]]];
+    NSString *dateText = [NSString stringWithFormat:@"%@: %@",[NSString stringWithFormat:NSLocalizedString(@"Last Updated", nil)],[dateFormatter stringFromDate:[NSDate date]]];
     self.dateTimeLabel.text = dateText;
     // will change later
-    self.regionJp = YES;
+    //self.regionJp = YES;
     refreshFact = NO;
     spinnerFact = NO;
     self.loadingSpinner.hidden = YES;
@@ -223,14 +223,15 @@
                 refreshFact = NO;
                 self.loadingSpinner.hidden = YES;
                 [spinner stopAnimating];
-                [self.youtubeTableView reloadData];
                 if (self.playerView.playerState == kYTPlayerStateEnded) {
                     NSLog(@"state: playing %ld",(long)self.playerView.playerState);
                     [self.timerProgress invalidate];
                     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                    [self.youtubeTableView reloadData];
+                } else if (self.playerView.playerState == kYTPlayerStatePlaying) {
+                    refreshFact = YES;
                 }
                 
+                [self.youtubeTableView reloadData];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
             } else {
                 [self callAllVideoDuration:videoIdString];
@@ -242,13 +243,13 @@
                 refreshFact = NO;
                 self.loadingSpinner.hidden = YES;
                 [spinner stopAnimating];
-                [self.youtubeTableView reloadData];
                 if (self.playerView.playerState == kYTPlayerStateEnded) {
                     NSLog(@"state: playing %ld",(long)self.playerView.playerState);
                     [self.timerProgress invalidate];
                     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                    [self.youtubeTableView reloadData];
+                    
                 }
+                [self.youtubeTableView reloadData];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
             } else {
                 [self callAllVideoDuration:videoIdString];
@@ -285,11 +286,9 @@
     double currentTimeChange = sender.value * self.playerTotalTime;
     NSTimeInterval currentTimeInterval = currentTimeChange;
     self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
-    
     [self.playerView seekToSeconds:currentTimeChange allowSeekAhead:YES];
+     self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
 }
-
-
 
 - (void)makeProgressBarMoving:(NSTimer *)timer
 {
@@ -297,15 +296,15 @@
     double currentTime = [self.playerView currentTime];
     NSTimeInterval currentTimeInterval = currentTime;
     self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
-    
+//     NSLog(@"timecheck :%@",[self stringFromTimeInterval:currentTimeInterval]);
     if (isSeekForward) {
         if (total < 1) {
             float playerCurrentTime = [self.playerView currentTime];
             playerCurrentTime+=5;
             self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
             [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
-            
         } else {
+            NSLog(@">1");
             [self.timerProgress invalidate];
         }
         
@@ -317,6 +316,7 @@
             [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
             
         } else {
+            NSLog(@">1");
             [self.timerProgress invalidate];
         }
         
@@ -325,6 +325,7 @@
             float playerCurrentTime = [self.playerView currentTime];
             self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
         } else {
+            NSLog(@"<1 what ?");
             [self.timerProgress invalidate];
         }
         
@@ -336,8 +337,9 @@
     if (!spinnerFact) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
-        NSString *dateText = [NSString stringWithFormat:@"Date: %@",[dateFormatter stringFromDate:[NSDate date]]];
+        NSString *dateText = [NSString stringWithFormat:@"%@: %@",[NSString stringWithFormat:NSLocalizedString(@"Last Updated", nil)],[dateFormatter stringFromDate:[NSDate date]]];
         self.dateTimeLabel.text = dateText;
+
         [self callYoutube:self.regionJp];
     }
 
@@ -359,6 +361,7 @@
 
 - (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
+    NSLog(@"what state == %ld",(long)self.playerView.playerState);
     if (state == kYTPlayerStateEnded) {
         if(spinnerFact){
             NSLog(@"still loading");
@@ -385,6 +388,7 @@
         
         self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
         
+        [self.timerProgress invalidate];
         self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
         
     } else if (state == kYTPlayerStatePaused) {
@@ -408,6 +412,11 @@
             [self.youtubeTableView reloadData];
         }
 
+    } else if (state == kYTPlayerStateBuffering){
+        NSLog(@"bufferring ?");
+        //self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
+    } else {
+        NSLog(@"what state == %ld",(long)self.playerView.playerState);
     }
 }
 
@@ -419,12 +428,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self.youtube.durationList count] != 0) {
-        //return 50;
-        return [self.youtube.durationList count];
-    }else{
+    if (spinnerFact) {
         return 0;
+    } else {
+        if ([self.youtube.durationList count] != 0) {
+            //return 50;
+            return [self.youtube.durationList count];
+        }else{
+            return 0;
+        }
     }
+    
    
 }
 

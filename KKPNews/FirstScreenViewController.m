@@ -30,6 +30,16 @@
     self.spinner.hidden = NO;
     [self.spinner startAnimating];
     jp = YES;
+    
+    NSLocale *currentLocale = [NSLocale currentLocale];
+    NSString *region = [currentLocale objectForKey:NSLocaleCountryCode];
+    NSLog(@"region code %@",region);
+    if ([region isEqualToString:@"ja-JP"]) {
+        jp = YES;
+    } else {
+        jp = NO;
+    }
+    
     if (jp) {
         channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
          count = [channelListJP count];
@@ -202,6 +212,7 @@
         
         MainViewController *dest = segue.destinationViewController;
         dest.youtube = self.youtube;
+        dest.regionJp = jp;
     }
 }
 

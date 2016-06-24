@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -341,5 +342,106 @@
             </objects>
             <point key="canvasLocation" x="651" y="-315"/>
         </scene>
+        <!--Tutorial Navigation Controller-->
+        <scene sceneID="bz6-Wz-pFJ">
+            <objects>
+                <navigationController id="usz-zc-etL" customClass="TutorialNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fpx-n6-RmD">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0zb-w3-G3T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5486" y="-1238"/>
+        </scene>
+        <!--Tutorial-->
+        <scene sceneID="pfp-8E-1jY">
+            <objects>
+                <viewController id="mkk-c1-Fpo" customClass="Tutorial1ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="AVa-23-ttO"/>
+                        <viewControllerLayoutGuide type="bottom" id="yrH-9o-nHU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Aye-an-Oi6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqm-8K-zvk">
+                                <rect key="frame" x="0.0" y="533" width="600" height="67"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle_1" translatesAutoresizingMaskIntoConstraints="NO" id="7Bu-DL-VMd">
+                                        <rect key="frame" x="227" y="24" width="147" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="19" id="AxZ-W7-Nw3"/>
+                                            <constraint firstAttribute="width" constant="147" id="KgP-cT-gQl"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="7Bu-DL-VMd" firstAttribute="top" secondItem="Uqm-8K-zvk" secondAttribute="top" constant="24" id="6iV-cZ-XET"/>
+                                    <constraint firstAttribute="height" constant="67" id="CcB-aU-LoE"/>
+                                    <constraint firstItem="7Bu-DL-VMd" firstAttribute="centerX" secondItem="Uqm-8K-zvk" secondAttribute="centerX" id="zVU-Da-Id1"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQ7-p4-YNc">
+                                <rect key="frame" x="374" y="551" width="86" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="86" id="4mD-gx-q7e"/>
+                                    <constraint firstAttribute="height" constant="31" id="GAb-ye-hOf"/>
+                                </constraints>
+                                <state key="normal" image="nextButtonTutorial"/>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="4mD-gx-q7e"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="GAb-ye-hOf"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="nextButtonTutorialPressed:" destination="mkk-c1-Fpo" eventType="touchUpInside" id="HxO-Of-Jnk"/>
+                                </connections>
+                            </button>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xCR-OZ-EoF">
+                                <rect key="frame" x="0.0" y="20" width="600" height="513"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.35686274509999999" green="0.74901960779999999" blue="0.83921568629999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="xCR-OZ-EoF" firstAttribute="leading" secondItem="Aye-an-Oi6" secondAttribute="leading" id="H13-bl-xcd"/>
+                            <constraint firstItem="Uqm-8K-zvk" firstAttribute="top" secondItem="xCR-OZ-EoF" secondAttribute="bottom" id="H4s-mw-PCk"/>
+                            <constraint firstItem="Uqm-8K-zvk" firstAttribute="leading" secondItem="Aye-an-Oi6" secondAttribute="leadingMargin" constant="-20" id="N2x-70-Ogw"/>
+                            <constraint firstItem="yrH-9o-nHU" firstAttribute="top" secondItem="Uqm-8K-zvk" secondAttribute="bottom" id="NYq-uk-D12"/>
+                            <constraint firstAttribute="trailing" secondItem="xCR-OZ-EoF" secondAttribute="trailing" id="it2-bk-8Wy"/>
+                            <constraint firstItem="XQ7-p4-YNc" firstAttribute="leading" secondItem="7Bu-DL-VMd" secondAttribute="trailing" id="lHS-CU-3yR"/>
+                            <constraint firstItem="XQ7-p4-YNc" firstAttribute="top" secondItem="Uqm-8K-zvk" secondAttribute="bottom" constant="-49" id="lmt-B7-lNo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Uqm-8K-zvk" secondAttribute="trailing" constant="-20" id="mHH-Jh-Aeo"/>
+                            <constraint firstItem="xCR-OZ-EoF" firstAttribute="top" secondItem="AVa-23-ttO" secondAttribute="bottom" id="ubr-ID-waf"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="d1P-Gi-9gH" appends="YES" id="Ap6-CI-AiX"/>
+                        </connections>
+                    </view>
+                    <navigationItem key="navigationItem" title="Tutorial" id="8Cq-PH-P37"/>
+                    <connections>
+                        <outlet property="nextButtonTutorial" destination="XQ7-p4-YNc" id="orh-gS-k5O"/>
+                        <outlet property="tutorialWebView" destination="xCR-OZ-EoF" id="qVH-BP-nPC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sn8-z3-Gnu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="d1P-Gi-9gH"/>
+            </objects>
+            <point key="canvasLocation" x="-4802" y="-1238"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="circle_1" width="22" height="22"/>
+        <image name="nextButtonTutorial" width="22" height="22"/>
+    </resources>
 </document>

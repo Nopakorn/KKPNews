@@ -21,6 +21,7 @@
 		5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */; };
 		5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C11D0E957B005D7109 /* Youtube.m */; };
 		5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */; };
+		5CDC28761D1CEAA4002B4454 /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CDC28781D1CEAA4002B4454 /* localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,11 @@
 		5C5A33C11D0E957B005D7109 /* Youtube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Youtube.m; sourceTree = "<group>"; };
 		5C5A33C31D112C9E005D7109 /* FirstScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstScreenViewController.h; sourceTree = "<group>"; };
 		5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstScreenViewController.m; sourceTree = "<group>"; };
+		5CDC28791D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		5CDC287A1D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5CDC287B1D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/localizable.strings; sourceTree = "<group>"; };
+		5CDC287D1D1CEB7B002B4454 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/localizable.strings; sourceTree = "<group>"; };
+		5CDC287E1D1CECFF002B4454 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/localizable.strings; sourceTree = "<group>"; };
 		8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.release.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.release.xcconfig"; sourceTree = "<group>"; };
 		9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +143,7 @@
 				5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */,
 				5C5A33B21D0E7118005D7109 /* MainViewController.h */,
 				5C5A33B31D0E7118005D7109 /* MainViewController.m */,
+				5CDC28781D1CEAA4002B4454 /* localizable.strings */,
 			);
 			path = KKPNews;
 			sourceTree = "<group>";
@@ -290,6 +297,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 5C4FEBFE1D0A6C2C00894E56;
 			productRefGroup = 5C4FEC081D0A6C2C00894E56 /* Products */;
@@ -309,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */,
+				5CDC28761D1CEAA4002B4454 /* localizable.strings in Resources */,
 				5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */,
 				5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */,
 				5C4FEC151D0A6C2C00894E56 /* Main.storyboard in Resources */,
@@ -430,6 +439,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				5C4FEC141D0A6C2C00894E56 /* Base */,
+				5CDC28791D1CEAD1002B4454 /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -438,8 +448,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				5C4FEC1C1D0A6C2C00894E56 /* Base */,
+				5CDC287A1D1CEAD1002B4454 /* ja */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5CDC28781D1CEAA4002B4454 /* localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5CDC287B1D1CEAD1002B4454 /* ja */,
+				5CDC287D1D1CEB7B002B4454 /* en */,
+				5CDC287E1D1CECFF002B4454 /* Base */,
+			);
+			name = localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

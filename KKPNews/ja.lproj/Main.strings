@@ -1,0 +1,18 @@
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "ExT-2O-BK6"; */
+"ExT-2O-BK6.text" = "00:00";
+
+/* Class = "UIButton"; normalTitle = "Play"; ObjectID = "F81-Bt-NyY"; */
+"F81-Bt-NyY.normalTitle" = "Play";
+
+/* Class = "UILabel"; text = "Splash Screen Bros"; ObjectID = "hFp-6l-3dX"; */
+"hFp-6l-3dX.text" = "Splash Screen Bros";
+
+/* Class = "UIButton"; normalTitle = "Refresh"; ObjectID = "jfR-NK-5rO"; */
+"jfR-NK-5rO.normalTitle" = "Refresh";
+
+/* Class = "UILabel"; text = "Date: 2016/06/21 3:22"; ObjectID = "rDO-Ni-ahO"; */
+"rDO-Ni-ahO.text" = "Date: 2016/06/21 3:22";
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "veb-2w-LCA"; */
+"veb-2w-LCA.text" = "00:00";
