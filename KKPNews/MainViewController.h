@@ -10,9 +10,10 @@
 #import "YTPlayerView.h"
 #import "Youtube.h"
 
-@interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource>
 {
     UIActivityIndicatorView *spinner;
+    NSTimer *hidingView;
 }
 
 @property (strong, nonatomic) IBOutlet YTPlayerView *playerView;
@@ -38,5 +39,12 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingSpinner;
 
 @property (nonatomic) BOOL regionJp;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *btmControlAreaConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *heighDateAreaConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightControllerAreaConstraint;
 
+@property (weak, nonatomic) IBOutlet UIView *controllerAreaView;
+
+@property (weak, nonatomic) IBOutlet UIView *dateAreaView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *playerViewTrailingConstraint;
 @end

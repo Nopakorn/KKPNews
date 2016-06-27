@@ -70,16 +70,31 @@
     [self.progressSlider setMinimumTrackImage:minImage forState:UIControlStateNormal];
     [self.progressSlider setMaximumTrackImage:maxImage forState:UIControlStateNormal];
     
+    //[self hideNavWithFact:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+   
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [hidingView invalidate];
 }
 
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [hidingView invalidate];
+    hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+    UITapGestureRecognizer *tgpr_webView = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                   action:@selector(handleTapPressedOnWebView:)];
+    tgpr_webView.delegate = self;
+    [self.playerView addGestureRecognizer:tgpr_webView];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 
@@ -100,6 +115,74 @@
     if (spinnerFact) {
        // spinner.center = CGPointMake(self.youtubeTableView.center.x, 85.5);
     }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    if ([UIScreen mainScreen].bounds.size.width < [UIScreen mainScreen].bounds.size.height) {
+        if (self.youtubeTableView.hidden == true) {
+            self.btmControlAreaConstraint.constant = 0;
+            self.heightControllerAreaConstraint.constant = 0;
+        } else {
+            self.btmControlAreaConstraint.constant = 320;
+            self.heightControllerAreaConstraint.constant = 44;
+        }
+    } else {
+        
+        if (self.youtubeTableView.hidden == true) {
+            
+            self.playerViewTrailingConstraint.constant = 0;
+            self.heightControllerAreaConstraint.constant = 0;
+            
+        } else {
+            
+            self.playerViewTrailingConstraint.constant = 320;
+            self.heightControllerAreaConstraint.constant = 44;
+        }
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+- (void)handleTapPressedOnWebView:(UIGestureRecognizer *)gestureRecognizer
+{
+    NSLog(@"tap on");
+    [self hideWithFact:NO];
+    [hidingView invalidate];
+     hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+}
+
+- (void)hideWithFact:(BOOL )fact
+{
+    if (fact) {
+        self.btmControlAreaConstraint.constant = 0;
+        self.heightControllerAreaConstraint.constant = 0;
+        self.youtubeTableView.hidden = YES;
+        
+    } else {
+
+        self.btmControlAreaConstraint.constant = 320;
+        self.heightControllerAreaConstraint.constant = 44;
+        self.youtubeTableView.hidden = NO;
+    }
+}
+
+- (void)hide
+{
+      if ( self.youtubeTableView.hidden == YES) {
+    
+          self.btmControlAreaConstraint.constant = 320;
+          self.heightControllerAreaConstraint.constant = 44;
+          self.youtubeTableView.hidden = NO;
+      } else {
+    
+          self.btmControlAreaConstraint.constant = 0;
+          self.heightControllerAreaConstraint.constant = 0;
+          self.youtubeTableView.hidden = YES;
+      }
 }
 
 - (void)playlingYoutube
@@ -299,9 +382,10 @@
 
 - (IBAction)sliderValueChanged:(UISlider *)sender
 {
-//    [self hideNavWithFact:NO];
-//    [hideNavigation invalidate];
-//    hideNavigation = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hideNavigation) userInfo:nil repeats:NO];
+    [self hideWithFact:NO];
+    [hidingView invalidate];
+    hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+    
     NSInteger startTime = sender.value * self.playerTotalTime;
     [self.timerProgress invalidate];
     self.progressSlider.value = (double)startTime / self.playerTotalTime;
@@ -311,48 +395,54 @@
     self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
     [self.playerView seekToSeconds:currentTimeChange allowSeekAhead:YES];
      self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:self.timerProgress forMode:NSRunLoopCommonModes];
 }
 
 - (void)makeProgressBarMoving:(NSTimer *)timer
 {
-    float total = [self.progressSlider value];
-    double currentTime = [self.playerView currentTime];
-    NSTimeInterval currentTimeInterval = currentTime;
-    self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
-
-    if (isSeekForward) {
-        if (total < 1) {
-            float playerCurrentTime = [self.playerView currentTime];
-            playerCurrentTime+=5;
-            self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
-            [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
-        } else {
-
-            [self.timerProgress invalidate];
-        }
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-    } else if (isSeekBackward){
-        if (total < 1) {
-            float playerCurrentTime = [self.playerView currentTime];
-            playerCurrentTime-=5;
-            self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
-            [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
+    });
+        float total = [self.progressSlider value];
+        double currentTime = [self.playerView currentTime];
+        NSTimeInterval currentTimeInterval = currentTime;
+        self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
+        
+        if (isSeekForward) {
+            if (total < 1) {
+                float playerCurrentTime = [self.playerView currentTime];
+                playerCurrentTime+=5;
+                self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+                [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
+            } else {
+                
+                [self.timerProgress invalidate];
+            }
+            
+        } else if (isSeekBackward){
+            if (total < 1) {
+                float playerCurrentTime = [self.playerView currentTime];
+                playerCurrentTime-=5;
+                self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+                [self.playerView seekToSeconds:playerCurrentTime allowSeekAhead:YES];
+                
+            } else {
+                
+                [self.timerProgress invalidate];
+            }
             
         } else {
+            if (total < 1) {
+                float playerCurrentTime = [self.playerView currentTime];
+                self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
+                self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
+            } else {
+                [self.timerProgress invalidate];
+            }
+            
+        }
 
-            [self.timerProgress invalidate];
-        }
-        
-    }else {
-        if (total < 1) {
-            float playerCurrentTime = [self.playerView currentTime];
-            self.progressSlider.value = (playerCurrentTime / (float)self.playerTotalTime);
-            self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
-        } else {
-            [self.timerProgress invalidate];
-        }
-        
-    }
+    
 }
 
 - (IBAction)refeshButtonPressed:(id)sender
@@ -370,7 +460,6 @@
 
 - (IBAction)buttonPressed:(id)sender
 {
-    UIButton *btn = (UIButton *)sender;
     UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
     UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
     if (sender == self.playButton) {
@@ -414,9 +503,12 @@
         NSTimeInterval currentTimeInterval = currentTime;
         
         self.currentTime.text = [self stringFromTimeInterval:currentTimeInterval];
-        
+
         [self.timerProgress invalidate];
         self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:self.timerProgress forMode:NSRunLoopCommonModes];
+
+        
         
     } else if (state == kYTPlayerStatePaused) {
         [self.timerProgress invalidate];
