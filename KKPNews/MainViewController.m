@@ -59,14 +59,14 @@
     self.loadingSpinner.hidden = YES;
     [self playlingYoutube];
     
-    
-//    UIImage *new = [UIImage imageNamed:@"thumbnail.png"];
-//    UIImage *myNewThumbnail = [MainViewController imageWithImage:new scaledToSize:CGSizeMake(20, 20)];
-//    [self.progressSlider setThumbImage:myNewThumbnail forState:UIControlStateNormal];
+    //customize progressbar
+    UIImage *new = [UIImage imageNamed:@"thumbnail.png"];
+    UIImage *myNewThumbnail = [MainViewController imageWithImage:new scaledToSize:CGSizeMake(20, 20)];
+    [self.progressSlider setThumbImage:myNewThumbnail forState:UIControlStateNormal];
     UIImage *minImage = [[UIImage imageNamed:@"min"] stretchableImageWithLeftCapWidth:9 topCapHeight:0];
     UIImage *maxImage = [[UIImage imageNamed:@"max"] stretchableImageWithLeftCapWidth:9 topCapHeight:0];
-    minImage = [MainViewController imageWithImage:minImage scaledToSize:CGSizeMake(3, 3)];
-    maxImage = [MainViewController imageWithImage:maxImage scaledToSize:CGSizeMake(3, 3)];
+    minImage = [MainViewController imageWithImage:minImage scaledToSize:CGSizeMake(4, 4)];
+    maxImage = [MainViewController imageWithImage:maxImage scaledToSize:CGSizeMake(4, 4)];
     [self.progressSlider setMinimumTrackImage:minImage forState:UIControlStateNormal];
     [self.progressSlider setMaximumTrackImage:maxImage forState:UIControlStateNormal];
     
@@ -269,6 +269,8 @@
                     [self.timerProgress invalidate];
                     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
                     
+                } else if (self.playerView.playerState == kYTPlayerStatePlaying) {
+                    refreshFact = YES;
                 }
                 [self.youtubeTableView reloadData];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
@@ -566,6 +568,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.playerView pauseVideo];
+    refreshFact = NO;
     item = indexPath.row;
     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
     [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
