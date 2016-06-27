@@ -32,6 +32,7 @@
     NSInteger countDuration;
     BOOL refreshFact;
     BOOL spinnerFact;
+    BOOL firstTime;
 }
 
 @synthesize youtube;
@@ -40,6 +41,7 @@
     [super viewDidLoad];
     //testing UI
     receivedVideo = NO;
+    firstTime = YES;
     [self.navigationController setNavigationBarHidden:YES];
     self.playerView.delegate = self;
     item = 0;
@@ -87,8 +89,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [hidingView invalidate];
-    hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
     UITapGestureRecognizer *tgpr_webView = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                    action:@selector(handleTapPressedOnWebView:)];
     tgpr_webView.delegate = self;
@@ -199,6 +199,7 @@
 #pragma Call apis refresh
 - (void)callYoutube:(BOOL )jp
 {
+    [hidingView invalidate];
     [self.youtube.durationList removeAllObjects];
     [self.youtube.data removeAllObjects];
     [self.youtubeTableView reloadData];
@@ -336,6 +337,7 @@
                 }
                 
                 [self.youtubeTableView reloadData];
+                hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
             } else {
                 [self callAllVideoDuration:videoIdString];
@@ -356,6 +358,7 @@
                     refreshFact = YES;
                 }
                 [self.youtubeTableView reloadData];
+                hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
             } else {
                 [self callAllVideoDuration:videoIdString];
@@ -441,8 +444,7 @@
             }
             
         }
-
-    
+ 
 }
 
 - (IBAction)refeshButtonPressed:(id)sender
@@ -507,7 +509,11 @@
         [self.timerProgress invalidate];
         self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:self.timerProgress forMode:NSRunLoopCommonModes];
-
+        if (firstTime) {
+            [hidingView invalidate];
+            hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+            firstTime = NO;
+        }
         
         
     } else if (state == kYTPlayerStatePaused) {
@@ -533,7 +539,7 @@
         }
 
     } else if (state == kYTPlayerStateBuffering){
-        NSLog(@"bufferring ?");
+        NSLog(@"bufferring");
         //self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
     } else {
         NSLog(@"what state == %ld",(long)self.playerView.playerState);

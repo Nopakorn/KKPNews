@@ -331,9 +331,6 @@
                                 <exclude reference="Tj1-tQ-09u"/>
                                 <exclude reference="V5b-Ro-ucC"/>
                                 <exclude reference="XvE-t4-BPr"/>
-                                <exclude reference="Hpd-lx-6Zp"/>
-                                <exclude reference="XDb-wC-dZ3"/>
-                                <exclude reference="Yq7-iq-FKS"/>
                                 <exclude reference="5RP-0e-y90"/>
                                 <exclude reference="7rV-qi-saR"/>
                                 <exclude reference="Dx8-5B-CFV"/>
@@ -349,6 +346,9 @@
                                 <exclude reference="pZd-aZ-eYq"/>
                                 <exclude reference="qI3-Au-q6P"/>
                                 <exclude reference="tEH-jn-PyL"/>
+                                <exclude reference="Hpd-lx-6Zp"/>
+                                <exclude reference="XDb-wC-dZ3"/>
+                                <exclude reference="Yq7-iq-FKS"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=compact">
@@ -366,9 +366,6 @@
                                 <exclude reference="W4f-PJ-bsl"/>
                                 <include reference="XvE-t4-BPr"/>
                                 <exclude reference="biD-a9-lQ3"/>
-                                <exclude reference="Onl-h2-Ep2"/>
-                                <include reference="XDb-wC-dZ3"/>
-                                <exclude reference="Yq7-iq-FKS"/>
                                 <exclude reference="5RP-0e-y90"/>
                                 <exclude reference="Dx8-5B-CFV"/>
                                 <exclude reference="Lcs-Lj-F09"/>
@@ -378,6 +375,9 @@
                                 <include reference="pZd-aZ-eYq"/>
                                 <exclude reference="qI3-Au-q6P"/>
                                 <exclude reference="uxE-Kk-AUW"/>
+                                <exclude reference="Onl-h2-Ep2"/>
+                                <include reference="XDb-wC-dZ3"/>
+                                <exclude reference="Yq7-iq-FKS"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
