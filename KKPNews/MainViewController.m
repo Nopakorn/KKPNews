@@ -60,7 +60,7 @@
     spinnerFact = NO;
     self.loadingSpinner.hidden = YES;
     [self playlingYoutube];
-    
+   
     //customize progressbar
     UIImage *new = [UIImage imageNamed:@"thumbnail.png"];
     UIImage *myNewThumbnail = [MainViewController imageWithImage:new scaledToSize:CGSizeMake(20, 20)];

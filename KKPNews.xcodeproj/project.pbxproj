@@ -21,7 +21,7 @@
 		5C5A33BF1D0E78EE005D7109 /* YoutubeListCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33BE1D0E78EE005D7109 /* YoutubeListCustomCell.m */; };
 		5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C11D0E957B005D7109 /* Youtube.m */; };
 		5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */; };
-		5CDC28761D1CEAA4002B4454 /* localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CDC28781D1CEAA4002B4454 /* localizable.strings */; };
+		5C60078D1D22326F00176B4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5C60078F1D22326F00176B4B /* Localizable.strings */; };
 		5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */; };
 		5CDC288B1D1D2342002B4454 /* Tutorial2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28831D1D2342002B4454 /* Tutorial2ViewController.m */; };
 		5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */; };
@@ -74,11 +74,12 @@
 		5C5A33C11D0E957B005D7109 /* Youtube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Youtube.m; sourceTree = "<group>"; };
 		5C5A33C31D112C9E005D7109 /* FirstScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstScreenViewController.h; sourceTree = "<group>"; };
 		5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstScreenViewController.m; sourceTree = "<group>"; };
-		5CDC28791D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
-		5CDC287A1D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		5CDC287B1D1CEAD1002B4454 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/localizable.strings; sourceTree = "<group>"; };
-		5CDC287D1D1CEB7B002B4454 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/localizable.strings; sourceTree = "<group>"; };
-		5CDC287E1D1CECFF002B4454 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/localizable.strings; sourceTree = "<group>"; };
+		5C6007871D22323100176B4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		5C6007881D22323100176B4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5C6007891D22323700176B4B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		5C60078A1D22323700176B4B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5C60078E1D22326F00176B4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5C6007901D22327100176B4B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5CDC28801D1D2342002B4454 /* TutorialNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialNavigationController.h; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.h"; sourceTree = "<group>"; };
 		5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialNavigationController.m; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.m"; sourceTree = "<group>"; };
 		5CDC28821D1D2342002B4454 /* Tutorial2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial2ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial2ViewController.h"; sourceTree = "<group>"; };
@@ -165,9 +166,9 @@
 				5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */,
 				5C5A33B21D0E7118005D7109 /* MainViewController.h */,
 				5C5A33B31D0E7118005D7109 /* MainViewController.m */,
-				5CDC28781D1CEAA4002B4454 /* localizable.strings */,
 				5CDC28951D1D3167002B4454 /* CustomSlider.h */,
 				5CDC28961D1D3167002B4454 /* CustomSlider.m */,
+				5C60078F1D22326F00176B4B /* Localizable.strings */,
 			);
 			path = KKPNews;
 			sourceTree = "<group>";
@@ -336,7 +337,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				ja,
 			);
@@ -358,7 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */,
-				5CDC28761D1CEAA4002B4454 /* localizable.strings in Resources */,
+				5C60078D1D22326F00176B4B /* Localizable.strings in Resources */,
 				5CDC28911D1D2399002B4454 /* tutorial in Resources */,
 				5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */,
 				5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */,
@@ -487,7 +487,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				5C4FEC141D0A6C2C00894E56 /* Base */,
-				5CDC28791D1CEAD1002B4454 /* ja */,
+				5C6007871D22323100176B4B /* en */,
+				5C6007891D22323700176B4B /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -496,19 +497,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				5C4FEC1C1D0A6C2C00894E56 /* Base */,
-				5CDC287A1D1CEAD1002B4454 /* ja */,
+				5C6007881D22323100176B4B /* en */,
+				5C60078A1D22323700176B4B /* ja */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		5CDC28781D1CEAA4002B4454 /* localizable.strings */ = {
+		5C60078F1D22326F00176B4B /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5CDC287B1D1CEAD1002B4454 /* ja */,
-				5CDC287D1D1CEB7B002B4454 /* en */,
-				5CDC287E1D1CECFF002B4454 /* Base */,
+				5C60078E1D22326F00176B4B /* Base */,
+				5C6007901D22327100176B4B /* ja */,
 			);
-			name = localizable.strings;
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -603,6 +604,7 @@
 			baseConfigurationReference = 9BBC6ED3CE728CA73CB0FABE /* Pods-KKPNews.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage1;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = KKPNews/Info.plist;
@@ -619,6 +621,7 @@
 			baseConfigurationReference = 8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage1;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = KKPNews/Info.plist;
