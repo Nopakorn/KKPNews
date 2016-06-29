@@ -9,12 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "YTPlayerView.h"
 #import "Youtube.h"
+#import <UIEMultiAccess/UIEMultiAccess.h>
 
-@interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource>
+@interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UMAFocusManagerDelegate>
 {
     UIActivityIndicatorView *spinner;
     NSTimer *hidingView;
 }
+
+//@property (nonatomic) UMAApplication *umaApp;
+//@property (nonatomic, strong) UMAFocusManager *focusManager;
 
 @property (strong, nonatomic) IBOutlet YTPlayerView *playerView;
 @property (weak, nonatomic) IBOutlet UITableView *youtubeTableView;

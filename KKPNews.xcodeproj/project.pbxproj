@@ -22,6 +22,14 @@
 		5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C11D0E957B005D7109 /* Youtube.m */; };
 		5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */; };
 		5C60078D1D22326F00176B4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5C60078F1D22326F00176B4B /* Localizable.strings */; };
+		5CD1088D1D23A75D000303BE /* UIEMultiAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1088C1D23A75D000303BE /* UIEMultiAccess.framework */; };
+		5CD1088F1D23A769000303BE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1088E1D23A769000303BE /* CoreMedia.framework */; };
+		5CD108911D23A779000303BE /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108901D23A779000303BE /* ExternalAccessory.framework */; };
+		5CD108931D23A784000303BE /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108921D23A784000303BE /* CoreBluetooth.framework */; };
+		5CD108951D23A793000303BE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108941D23A793000303BE /* AVFoundation.framework */; };
+		5CD108971D23A871000303BE /* UIEMultiAccess.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5CD108961D23A871000303BE /* UIEMultiAccess.bundle */; };
+		5CD108991D23A8A4000303BE /* libc++.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108981D23A8A4000303BE /* libc++.1.dylib */; };
+		5CD1089B1D23BCAB000303BE /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5CD1089A1D23BCAB000303BE /* Assets.bundle */; };
 		5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */; };
 		5CDC288B1D1D2342002B4454 /* Tutorial2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28831D1D2342002B4454 /* Tutorial2ViewController.m */; };
 		5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */; };
@@ -80,6 +88,14 @@
 		5C60078A1D22323700176B4B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5C60078E1D22326F00176B4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5C6007901D22327100176B4B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5CD1088C1D23A75D000303BE /* UIEMultiAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIEMultiAccess.framework; path = Framework/UIEMultiAccess.framework; sourceTree = "<group>"; };
+		5CD1088E1D23A769000303BE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		5CD108901D23A779000303BE /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		5CD108921D23A784000303BE /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		5CD108941D23A793000303BE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		5CD108961D23A871000303BE /* UIEMultiAccess.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = UIEMultiAccess.bundle; path = Framework/UIEMultiAccess.bundle; sourceTree = "<group>"; };
+		5CD108981D23A8A4000303BE /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "../../../../usr/lib/libc++.1.dylib"; sourceTree = "<group>"; };
+		5CD1089A1D23BCAB000303BE /* Assets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Assets.bundle; path = Framework/Assets.bundle; sourceTree = "<group>"; };
 		5CDC28801D1D2342002B4454 /* TutorialNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialNavigationController.h; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.h"; sourceTree = "<group>"; };
 		5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialNavigationController.m; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.m"; sourceTree = "<group>"; };
 		5CDC28821D1D2342002B4454 /* Tutorial2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial2ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial2ViewController.h"; sourceTree = "<group>"; };
@@ -102,6 +118,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CD108991D23A8A4000303BE /* libc++.1.dylib in Frameworks */,
+				5CD108951D23A793000303BE /* AVFoundation.framework in Frameworks */,
+				5CD108931D23A784000303BE /* CoreBluetooth.framework in Frameworks */,
+				5CD108911D23A779000303BE /* ExternalAccessory.framework in Frameworks */,
+				5CD1088F1D23A769000303BE /* CoreMedia.framework in Frameworks */,
+				5CD1088D1D23A75D000303BE /* UIEMultiAccess.framework in Frameworks */,
 				02633CD756F860C3597EB3E4 /* libPods-KKPNews.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,6 +148,8 @@
 		5C4FEBFE1D0A6C2C00894E56 = {
 			isa = PBXGroup;
 			children = (
+				5CD1089A1D23BCAB000303BE /* Assets.bundle */,
+				5CD108961D23A871000303BE /* UIEMultiAccess.bundle */,
 				5C4FEC091D0A6C2C00894E56 /* KKPNews */,
 				5C4FEC261D0A6C2C00894E56 /* KKPNewsTests */,
 				5C4FEC311D0A6C2C00894E56 /* KKPNewsUITests */,
@@ -236,6 +260,12 @@
 		76F10EF439F0FCA3AE4FD790 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5CD108981D23A8A4000303BE /* libc++.1.dylib */,
+				5CD108941D23A793000303BE /* AVFoundation.framework */,
+				5CD108921D23A784000303BE /* CoreBluetooth.framework */,
+				5CD108901D23A779000303BE /* ExternalAccessory.framework */,
+				5CD1088E1D23A769000303BE /* CoreMedia.framework */,
+				5CD1088C1D23A75D000303BE /* UIEMultiAccess.framework */,
 				146CD6DF9022665B65DDB95A /* libPods-KKPNews.a */,
 			);
 			name = Frameworks;
@@ -357,7 +387,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CD1089B1D23BCAB000303BE /* Assets.bundle in Resources */,
 				5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */,
+				5CD108971D23A871000303BE /* UIEMultiAccess.bundle in Resources */,
 				5C60078D1D22326F00176B4B /* Localizable.strings in Resources */,
 				5CDC28911D1D2399002B4454 /* tutorial in Resources */,
 				5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */,
@@ -607,6 +639,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage1;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Framework",
+				);
 				INFOPLIST_FILE = KKPNews/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -624,6 +661,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage1;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Framework",
+				);
 				INFOPLIST_FILE = KKPNews/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

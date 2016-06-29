@@ -9,10 +9,52 @@
 #import "MainViewController.h"
 #import "YoutubeListCustomCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "AppDelegate.h"
+#import <UIEMultiAccess/UIEMultiAccess.h>
+#import <UIEMultiAccess/DNApplicationManager.h>
+#import <UIEMultiAccess/DNAppCatalog.h>
+#import <UIEMultiAccess/UMAApplicationInfo.h>
+
+typedef NS_ENUM(NSInteger, SectionType) {
+    SECTION_TYPE_SETTINGS,
+    SECTION_TYPE_LAST_CONNECTED_DEVICE,
+    SECTION_TYPE_CONNECTED_DEVICE,
+    SECTION_TYPE_DISCOVERED_DEVICES,
+};
+
+typedef NS_ENUM(NSInteger, AlertType) {
+    ALERT_TYPE_FAIL_TO_CONNECT,
+    ALERT_TYPE_DISCOVERY_TIMEOUT,
+};
+
+static NSString *const kSettingsManualConnectionTitle = @"Manual Connection";
+static NSString *const kSettingsManualConnectionSubTitle =
+@"Be able to select a device which you want to connect.";
+static NSString *const kDeviceNone = @"No Name";
+static NSString *const kAddressNone = @"No Address";
+
+static NSString *const kRowNum = @"rowNum";
+static NSString *const kHeaderText = @"headerText";
+static NSString *const kTitleText = @"HID Device Sample";
+
+NSString *const kIsManualConnection = @"is_manual_connection";
+static const NSTimeInterval kHidDeviceControlTimeout = 5;
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface MainViewController ()
+@interface MainViewController ()<UMAFocusManagerDelegate, UMAAppDiscoveryDelegate, UMAApplicationDelegate>
+
+@property (nonatomic, strong) UMAFocusManager *focusManager;
+@property (nonatomic, strong) NSArray *applications;
+@property (nonatomic) BOOL remoteScreen;
+@property (nonatomic) UMAApplication *umaApp;
+@property (nonatomic) UMAHIDManager *hidManager;
+@property (nonatomic) UMAInputDevice *connectedDevice;
+@property (copy, nonatomic) void (^discoveryBlock)(UMAInputDevice *, NSError *);
+@property (copy, nonatomic) void (^connectionBlock)(UMAInputDevice *, NSError *);
+@property (copy, nonatomic) void (^disconnectionBlock)(UMAInputDevice *, NSError *);
+@property (nonatomic) NSMutableArray *inputDevices;
+
 
 @end
 
@@ -33,19 +75,24 @@
     BOOL refreshFact;
     BOOL spinnerFact;
     BOOL firstTime;
+    
+    NSInteger indexFocus;
+    BOOL kkpTriggered;
+    NSInteger directionFocus;
 }
 
 @synthesize youtube;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //testing UI
+
     receivedVideo = NO;
     firstTime = YES;
     [self.navigationController setNavigationBarHidden:YES];
     self.playerView.delegate = self;
     item = 0;
-    
+    kkpTriggered = NO;
+    directionFocus = 0;
     self.youtubeTableView.dataSource = self;
     self.youtubeTableView.delegate = self;
     self.youtubeTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -54,8 +101,6 @@
     [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
     NSString *dateText = [NSString stringWithFormat:@"%@: %@",[NSString stringWithFormat:NSLocalizedString(@"Last Updated", nil)],[dateFormatter stringFromDate:[NSDate date]]];
     self.dateTimeLabel.text = dateText;
-    // will change later
-    //self.regionJp = YES;
     refreshFact = NO;
     spinnerFact = NO;
     self.loadingSpinner.hidden = YES;
@@ -72,10 +117,26 @@
     [self.progressSlider setMinimumTrackImage:minImage forState:UIControlStateNormal];
     [self.progressSlider setMaximumTrackImage:maxImage forState:UIControlStateNormal];
     
-    //[self hideNavWithFact:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-   
+#pragma setup UMA in ViewDidload
+    _inputDevices = [NSMutableArray array];
+    _umaApp = [UMAApplication sharedApplication];
+    _umaApp.delegate = self;
+    _hidManager = [_umaApp requestHIDManager];
+    
+    [_umaApp addViewController:self];
+    
+    //focus
+    _focusManager = [[UMAApplication sharedApplication] requestFocusManagerForMainScreenWithDelegate:self];
+    [_focusManager setFocusRootView:self.youtubeTableView];
+    //[_focusManager moveFocus:1];
+    [_focusManager setHidden:YES];
+    [_focusManager moveFocus:1 direction:1];
+    
+    [self prepareBlocks];
+    //[_hidManager setDisconnectionCallback:_disconnectionBlock];
+    
 
 }
 
@@ -93,13 +154,21 @@
                                                                                    action:@selector(handleTapPressedOnWebView:)];
     tgpr_webView.delegate = self;
     [self.playerView addGestureRecognizer:tgpr_webView];
+    NSLog(@"focus? %ld",(long)[_focusManager focusIndex]);
+    NSLog(@"focus? %@",[_focusManager focusedView]);
     
+    [_hidManager setConnectionCallback:_connectionBlock];
+    [_hidManager enableAutoConnectionWithDiscoveryTimeout:kHidDeviceControlTimeout
+                                    WithDiscoveryInterval:kHidDeviceControlTimeout
+                                    WithConnectionTimeout:kHidDeviceControlTimeout];
+    [_hidManager startDiscoverWithDeviceName:nil];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 
 }
-# pragma resize image
+
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
     //UIGraphicsBeginImageContext(newSize);
     UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
@@ -109,7 +178,85 @@
     return newImage;
 }
 
-# pragma oreintation
+- (void)prepareBlocks
+{
+    __weak typeof(self) weakSelf = self;
+    
+    //
+    // Block of Discovery Completion
+    //
+    _discoveryBlock = ^(UMAInputDevice *device, NSError *error) {
+        UIAlertView *alertView;
+        
+        switch ([error code]) {
+            case kUMADiscoveryDone: // Intentionally stops by the app
+            case kUMADiscoveryFailed: // Discovery failed with some reason
+                //[weakSelf.refreshControl endRefreshing];
+                break;
+            case kUMADiscoveryTimeout: // Timeout occurred
+                [weakSelf.hidManager stopDiscoverDevice];
+                alertView = [[UIAlertView alloc] initWithTitle:@"Discovery of HID Device finished"
+                                                       message:@"If you would like to discover again, pull down the view."
+                                                      delegate:weakSelf
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil, nil];
+                alertView.tag = ALERT_TYPE_DISCOVERY_TIMEOUT;
+                [alertView show];
+                //[weakSelf.refreshControl endRefreshing];
+                break;
+            case kUMADiscoveryDiscovered:       // Device discovered
+                /* Get discovered devices and reload table*/
+                [weakSelf.inputDevices addObject:device];
+                //[weakSelf.sampleTableView reloadData];
+                break;
+            case kUMADiscoveryStarted:
+                break;
+            default:
+                break;
+        }
+    };
+    [_hidManager setDiscoveryCallback:_discoveryBlock];
+    
+    //
+    // Block of Connection Complete
+    //
+    _connectionBlock = ^(UMAInputDevice *device, NSError *error) {
+        UIAlertView *alertView;
+        switch ([error code]) {
+            case kUMAConnectedSuccess:
+                [weakSelf.hidManager stopDiscoverDevice];
+                weakSelf.connectedDevice = device;
+                //[weakSelf.sampleTableView reloadData];
+                break;
+            case kUMAConnectedTimeout:
+            case kUMAConnectedFailed:
+                alertView =
+                [[UIAlertView alloc] initWithTitle:@"Connection timeout occurred."
+                                           message:@"Reset the last memory and start to discovery?"
+                                          delegate:weakSelf
+                                 cancelButtonTitle:@"No"
+                                 otherButtonTitles:@"Yes", nil];
+                alertView.tag = ALERT_TYPE_FAIL_TO_CONNECT;
+                [alertView show];
+                break;
+            default:
+                break;
+                
+        }
+    };
+    [_hidManager setConnectionCallback:_connectionBlock];
+    
+    //
+    // Block of Disonnection Complete
+    //
+    _disconnectionBlock = ^(UMAInputDevice *device, NSError *error) {
+        weakSelf.connectedDevice = nil;
+        //[weakSelf.sampleTableView reloadData];
+    };
+    [_hidManager setDisconnectionCallback:_disconnectionBlock];
+}
+
+#pragma mark - oreintation
 - (void)orientationChanged:(NSNotification *)notification
 {
     if (spinnerFact) {
@@ -121,12 +268,39 @@
 {
     if ([UIScreen mainScreen].bounds.size.width < [UIScreen mainScreen].bounds.size.height) {
         if (self.youtubeTableView.hidden == true) {
-            self.btmControlAreaConstraint.constant = 0;
-            self.heightControllerAreaConstraint.constant = 0;
+            if (self.controllerAreaView.hidden == NO) {
+                self.btmControlAreaConstraint.constant = 0;
+                self.heightControllerAreaConstraint.constant = 44;
+            } else {
+                self.btmControlAreaConstraint.constant = 0;
+                self.heightControllerAreaConstraint.constant = 0;
+            }
+            
         } else {
             self.btmControlAreaConstraint.constant = 320;
             self.heightControllerAreaConstraint.constant = 44;
         }
+        
+//        if (kkpTriggered) {
+//            if (indexFocus == [self.youtube.data count]-1) {
+//                [_focusManager moveFocus:1];
+//            } else {
+//                
+//                if (indexFocus == 0) {
+//                    if (directionFocus == 1) {
+//                        [_focusManager moveFocus:indexFocus];
+//                    } else {
+//                        [_focusManager moveFocus:[_focusManager focusIndex]];
+//                    }
+//                    
+//                } else {
+//                    [_focusManager moveFocus:indexFocus];
+//                }
+//                
+//            }
+//
+//        }
+        
     } else {
         
         if (self.youtubeTableView.hidden == true) {
@@ -139,6 +313,29 @@
             self.playerViewTrailingConstraint.constant = 320;
             self.heightControllerAreaConstraint.constant = 44;
         }
+        
+        
+//        if (kkpTriggered) {
+//            if (indexFocus == [self.youtube.data count]-1) {
+//                [_focusManager moveFocus:1];
+//            } else {
+//                
+//                if (indexFocus == 0) {
+//                    if (directionFocus == 1) {
+//                        [_focusManager moveFocus:indexFocus];
+//                    } else {
+//                        [_focusManager moveFocus:[_focusManager focusIndex]];
+//                    }
+//                    
+//                } else {
+//                    [_focusManager moveFocus:indexFocus];
+//                }
+//                
+//            }
+//            
+//        }
+
+
     }
 }
 
@@ -161,29 +358,40 @@
         self.btmControlAreaConstraint.constant = 0;
         self.heightControllerAreaConstraint.constant = 0;
         self.youtubeTableView.hidden = YES;
+        self.controllerAreaView.hidden = YES;
         
     } else {
 
         self.btmControlAreaConstraint.constant = 320;
         self.heightControllerAreaConstraint.constant = 44;
         self.youtubeTableView.hidden = NO;
+        self.controllerAreaView.hidden = NO;
     }
 }
 
 - (void)hide
 {
-      if ( self.youtubeTableView.hidden == YES) {
-    
+//     if (self.controllerAreaView.hidden == YES) {
+//         self.btmControlAreaConstraint.constant = 0;
+//         self.heightControllerAreaConstraint.constant = 0;
+//         self.youtubeTableView.hidden = YES;
+//         self.controllerAreaView.hidden = YES;
+//     }
+
+     if ( self.youtubeTableView.hidden == YES) {
           self.btmControlAreaConstraint.constant = 320;
           self.heightControllerAreaConstraint.constant = 44;
           self.youtubeTableView.hidden = NO;
-      } else {
+          self.controllerAreaView.hidden = NO;
+     } else {
     
           self.btmControlAreaConstraint.constant = 0;
           self.heightControllerAreaConstraint.constant = 0;
           self.youtubeTableView.hidden = YES;
-      }
+          self.controllerAreaView.hidden = YES;
+     }
 }
+
 
 - (void)playlingYoutube
 {
@@ -196,7 +404,7 @@
     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
 }
 
-#pragma Call apis refresh
+#pragma mark - Call apis refresh
 - (void)callYoutube:(BOOL )jp
 {
     [hidingView invalidate];
@@ -369,10 +577,7 @@
     });
 }
 
-
-
-
-#pragma YTPlayerView delegate
+#pragma mark - YTPlayerView delegate
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
     self.progressSlider.value = 0;
@@ -539,14 +744,14 @@
         }
 
     } else if (state == kYTPlayerStateBuffering){
-        NSLog(@"bufferring");
+        //NSLog(@"bufferring");
         //self.timerProgress = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(makeProgressBarMoving:) userInfo:nil repeats:YES];
     } else {
         NSLog(@"what state == %ld",(long)self.playerView.playerState);
     }
 }
 
-# pragma table delegate and datasource
+# pragma mark - table delegate and datasource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -605,6 +810,46 @@
     return cell;
 }
 
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 89;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.playerView pauseVideo];
+    refreshFact = NO;
+    item = indexPath.row;
+    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+    [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.youtubeTableView reloadData];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    kkpTriggered = NO;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [self performSelector:@selector(scrollViewDidEndScrollingAnimation:) withObject:nil afterDelay:0.3];
+    [hidingView invalidate];
+
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [hidingView invalidate];
+    
+    if (kkpTriggered) {
+        [hidingView invalidate];
+    } else {
+        hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+    }
+    
+}
+
+
 - (NSString *)stringFromTimeInterval:(NSTimeInterval)interval {
     NSInteger ti = (NSInteger)interval;
     NSInteger seconds = ti % 60;
@@ -619,6 +864,7 @@
     }
     
 }
+
 - (NSString *)durationText:(NSString *)duration
 {
     NSInteger hours = 0;
@@ -658,19 +904,226 @@
     
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+
+float level = 0.0;
+- (BOOL)umaDidRotateWithDistance:(NSUInteger)distance direction:(UMADialDirection)direction
 {
-    return 89;
+    kkpTriggered = YES;
+    [hidingView invalidate];
+    NSLog(@"distance %lu direction %ld",(unsigned long)distance,(long)direction);
+    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
+    
+    return NO;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)umaDidTranslateWithDistance:(NSInteger)distanceX distanceY:(NSInteger)distanceY
 {
-    [self.playerView pauseVideo];
-    refreshFact = NO;
-    item = indexPath.row;
-    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-    [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.youtubeTableView reloadData];
+    kkpTriggered = YES;
+    [hidingView invalidate];
+    NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
+    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
+    indexFocus = [_focusManager focusIndex];
+    if (spinnerFact) {
+        return YES;
+        
+    } else {
+        if (refreshFact) {
+            item = 0;
+            [_focusManager setFocusRootView:self.youtubeTableView];
+            [_focusManager moveFocus:1 direction:1];
+            
+            [self.timerProgress invalidate];
+            UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+            [self.youtubeTableView reloadData];
+            refreshFact = NO;
+            return YES;
+            
+        } else {
+            
+            if ((distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1) ) {
+                NSLog(@"Right");
+                if (item == [self.youtube.data count]-1) {
+                    item = 0;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                } else {
+                    
+                    item+=1;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                }
+                
+                
+            } else if ((distanceX == -1 && distanceY == 0) || (distanceX == 0 && distanceY == -1)) {
+                NSLog(@"Left");
+                if (item == 0) {
+                    item = [self.youtube.data count]-1;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                } else {
+                    item-=1;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                    
+                }
+            }
+            if (distanceX == 0 && distanceY == 1) {
+                directionFocus = 0;
+                indexFocus+=2;
+                [_focusManager moveFocus:1 direction:kUMAFocusForward];
+            } else if (distanceX == 0 && distanceY == -1) {
+                directionFocus = 1;
+                [_focusManager moveFocus:1 direction:kUMAFocusBackward];
+            }
+            
+            return NO;
+
+        }
+        
+    }
+
 }
+
+
+- (NSString *)getButtonName:(UMAInputButtonType)button
+{
+    switch (button) {
+        case kUMAInputButtonTypeBack:
+            return @"Back";
+        case kUMAInputButtonTypeDown:
+            return @"Down";
+        case kUMAInputButtonTypeHome:
+            return @"Home";
+        case kUMAInputButtonTypeLeft:
+            return @"Left";
+        case kUMAInputButtonTypeMain:
+            return @"Main";
+        case kUMAInputButtonTypeRight:
+            return @"Right";
+        case kUMAInputButtonTypeUp:
+            return @"UP";
+        case kUMAInputButtonTypeVR:
+            return @"VR";
+        default:
+            return @"Unknown";
+    }
+}
+
+#pragma mark - UMARemoteInputEventDelegate
+
+- (BOOL)umaDidPressDownButton:(UMAInputButtonType)button
+{
+    
+    return YES;
+}
+
+
+- (BOOL)umaDidPressUpButton:(UMAInputButtonType)button
+{
+    [hidingView invalidate];
+    NSLog(@"press %@",[self getButtonName:button]);
+    if ([[self getButtonName:button] isEqualToString:@"Main"]) {
+        UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
+        UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+
+        if ([[self.playButton imageForState:UIControlStateNormal] isEqual:btnImagePlay]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Playback Started" object:self];
+            [self.playerView playVideo];
+            [self.playButton setImage:btnImagePause forState:UIControlStateNormal];
+        } else {
+            [self.playerView pauseVideo];
+            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+        }
+        return YES;
+    }
+    
+    
+    if ([[self getButtonName:button] isEqualToString:@"VR"]) {
+        //fullscreen
+        //-call control
+        //tableview
+        //-refresh
+        if (self.controllerAreaView.hidden == YES && self.youtubeTableView.hidden == YES) {
+            NSLog(@"showing controller");
+            self.controllerAreaView.hidden = NO;
+            
+            [hidingView invalidate];
+            hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+        }
+        
+        if (self.controllerAreaView.hidden == NO && self.youtubeTableView.hidden == NO) {
+            [hidingView invalidate];
+            [self callYoutube:self.regionJp];
+        }
+        
+    }
+    
+    return YES;
+}
+
+- (BOOL)umaDidLongPressButton:(UMAInputButtonType)button
+{
+    return YES;
+}
+
+- (BOOL)umaDidLongPressButton:(UMAInputButtonType)button state:(UMAInputGestureRecognizerState)state
+{
+    
+    return YES;
+}
+
+- (BOOL)umaDidDoubleClickButton:(UMAInputButtonType)button
+{
+    return YES;
+}
+
+- (void)umaDidAccelerometerUpdate:(UMAAcceleration)acceleration
+{
+    
+}
+
+
+
+
+#pragma mark - UMAAppDiscoveryDelegate
+- (void)didDiscoverySucceed:(NSArray *)appInfo
+{
+    
+}
+#pragma mark - UMAApplicationDelegate
+
+- (UIViewController *)uma:(UMAApplication *)application requestRootViewController:(UIScreen *)screen {
+    // This sample does not use this delegate
+    return nil;
+}
+
+- (void)didDiscoveryFail:(int)reason withMessage:(NSString *)message;
+{
+    
+}
+- (void)uma:(UMAApplication *)application didConnectInputDevice:(UMAInputDevice *)device
+{
+    
+}
+
+- (void)uma:(UMAApplication *)application didDisconnectInputDevice:(UMAInputDevice *)device
+{
+    
+}
+
 
 @end

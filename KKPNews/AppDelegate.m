@@ -7,8 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import <UIEMultiAccess/UIEMultiAccess.h>
 
-@interface AppDelegate ()
+@interface AppDelegate ()<UMAApplicationDelegate>
+@property (nonatomic) UIViewController *rootViewController; // Root view controller for the secondary display
 
 @end
 
@@ -19,6 +21,28 @@
     // Override point for customization after application launch.
     //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
      [application setStatusBarHidden:YES];
+    
+    UMAApplication *umaApp = [UMAApplication sharedApplication];
+    [umaApp setDelegate:self];
+    [umaApp setStatusBarStyle:kUMAStatusBarStyleBlack]; // Show status bar widget on secondary screen.
+    [umaApp setBeepSoundEnabled:YES];      // Enable beep sound when HID input event received.
+    [umaApp setVoiceOverEnabled:YES];      // Enable speech when a view gets focus.
+    [umaApp setAutoStart:YES];
+    [umaApp setup];
+    if ([umaApp isSecondScreenAvailable]) {
+        [umaApp setDisplayType:kUMADisplayHDMI];
+        [umaApp startProjection];
+    } else {
+    }
+
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    UMAApplication *umaApp = [UMAApplication sharedApplication];
+    [umaApp handleOpenURL:url];
+    
     return YES;
 }
 
@@ -124,6 +148,13 @@
             abort();
         }
     }
+}
+
+#pragma mark - UMAApplicationDelegate
+
+- (UIViewController *)uma:(UMAApplication *)application requestRootViewController:(UIScreen *)screen
+{
+    return _rootViewController;
 }
 
 @end
