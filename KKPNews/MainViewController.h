@@ -10,6 +10,7 @@
 #import "YTPlayerView.h"
 #import "Youtube.h"
 #import <UIEMultiAccess/UIEMultiAccess.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UMAFocusManagerDelegate>
 {

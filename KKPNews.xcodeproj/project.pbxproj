@@ -30,6 +30,8 @@
 		5CD108971D23A871000303BE /* UIEMultiAccess.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5CD108961D23A871000303BE /* UIEMultiAccess.bundle */; };
 		5CD108991D23A8A4000303BE /* libc++.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108981D23A8A4000303BE /* libc++.1.dylib */; };
 		5CD1089B1D23BCAB000303BE /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5CD1089A1D23BCAB000303BE /* Assets.bundle */; };
+		5CD1089E1D24D161000303BE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1089D1D24D161000303BE /* SystemConfiguration.framework */; };
+		5CD108A01D24D16A000303BE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1089F1D24D16A000303BE /* MediaPlayer.framework */; };
 		5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */; };
 		5CDC288B1D1D2342002B4454 /* Tutorial2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28831D1D2342002B4454 /* Tutorial2ViewController.m */; };
 		5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */; };
@@ -96,6 +98,8 @@
 		5CD108961D23A871000303BE /* UIEMultiAccess.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = UIEMultiAccess.bundle; path = Framework/UIEMultiAccess.bundle; sourceTree = "<group>"; };
 		5CD108981D23A8A4000303BE /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "../../../../usr/lib/libc++.1.dylib"; sourceTree = "<group>"; };
 		5CD1089A1D23BCAB000303BE /* Assets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Assets.bundle; path = Framework/Assets.bundle; sourceTree = "<group>"; };
+		5CD1089D1D24D161000303BE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		5CD1089F1D24D16A000303BE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		5CDC28801D1D2342002B4454 /* TutorialNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialNavigationController.h; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.h"; sourceTree = "<group>"; };
 		5CDC28811D1D2342002B4454 /* TutorialNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialNavigationController.m; path = "../../Youtube-Feed/Youtube-Feed/TutorialNavigationController.m"; sourceTree = "<group>"; };
 		5CDC28821D1D2342002B4454 /* Tutorial2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial2ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial2ViewController.h"; sourceTree = "<group>"; };
@@ -118,6 +122,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CD108A01D24D16A000303BE /* MediaPlayer.framework in Frameworks */,
+				5CD1089E1D24D161000303BE /* SystemConfiguration.framework in Frameworks */,
 				5CD108991D23A8A4000303BE /* libc++.1.dylib in Frameworks */,
 				5CD108951D23A793000303BE /* AVFoundation.framework in Frameworks */,
 				5CD108931D23A784000303BE /* CoreBluetooth.framework in Frameworks */,
@@ -260,6 +266,8 @@
 		76F10EF439F0FCA3AE4FD790 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5CD1089F1D24D16A000303BE /* MediaPlayer.framework */,
+				5CD1089D1D24D161000303BE /* SystemConfiguration.framework */,
 				5CD108981D23A8A4000303BE /* libc++.1.dylib */,
 				5CD108941D23A793000303BE /* AVFoundation.framework */,
 				5CD108921D23A784000303BE /* CoreBluetooth.framework */,

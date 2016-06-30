@@ -154,8 +154,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                                                                                    action:@selector(handleTapPressedOnWebView:)];
     tgpr_webView.delegate = self;
     [self.playerView addGestureRecognizer:tgpr_webView];
-    NSLog(@"focus? %ld",(long)[_focusManager focusIndex]);
-    NSLog(@"focus? %@",[_focusManager focusedView]);
     
     [_hidManager setConnectionCallback:_connectionBlock];
     [_hidManager enableAutoConnectionWithDiscoveryTimeout:kHidDeviceControlTimeout
@@ -305,9 +303,14 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         
         if (self.youtubeTableView.hidden == true) {
             
-            self.playerViewTrailingConstraint.constant = 0;
-            self.heightControllerAreaConstraint.constant = 0;
-            
+            if (self.controllerAreaView.hidden == NO) {
+                self.playerViewTrailingConstraint.constant = 0;
+                self.heightControllerAreaConstraint.constant = 44;
+            } else {
+                self.playerViewTrailingConstraint.constant = 0;
+                self.heightControllerAreaConstraint.constant = 0;
+            }
+   
         } else {
             
             self.playerViewTrailingConstraint.constant = 320;
@@ -359,13 +362,15 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         self.heightControllerAreaConstraint.constant = 0;
         self.youtubeTableView.hidden = YES;
         self.controllerAreaView.hidden = YES;
-        
+        self.dateTimeLabel.hidden = YES;
+    
     } else {
 
         self.btmControlAreaConstraint.constant = 320;
         self.heightControllerAreaConstraint.constant = 44;
         self.youtubeTableView.hidden = NO;
         self.controllerAreaView.hidden = NO;
+        self.dateTimeLabel.hidden = NO;
     }
 }
 
@@ -378,17 +383,19 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 //         self.controllerAreaView.hidden = YES;
 //     }
 
-     if ( self.youtubeTableView.hidden == YES) {
+     if ( self.youtubeTableView.hidden == YES && self.controllerAreaView.hidden == YES) {
           self.btmControlAreaConstraint.constant = 320;
           self.heightControllerAreaConstraint.constant = 44;
           self.youtubeTableView.hidden = NO;
           self.controllerAreaView.hidden = NO;
+          self.dateTimeLabel.hidden = NO;
      } else {
-    
+         
           self.btmControlAreaConstraint.constant = 0;
           self.heightControllerAreaConstraint.constant = 0;
           self.youtubeTableView.hidden = YES;
           self.controllerAreaView.hidden = YES;
+          self.dateTimeLabel.hidden = YES;
      }
 }
 
@@ -402,6 +409,8 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                           @"origin" :@"http://www.youtube.com"   };
     
     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+    
+    //[self.playerView loadPlaylistByVideos:<#(nonnull NSArray *)#> index:<#(int)#> startSeconds:<#(float)#> suggestedQuality:qual]
 }
 
 #pragma mark - Call apis refresh
@@ -909,19 +918,37 @@ float level = 0.0;
 - (BOOL)umaDidRotateWithDistance:(NSUInteger)distance direction:(UMADialDirection)direction
 {
     kkpTriggered = YES;
-    [hidingView invalidate];
-    NSLog(@"distance %lu direction %ld",(unsigned long)distance,(long)direction);
-    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
+    //[hidingView invalidate];
+//    NSLog(@"distance %lu direction %ld",(unsigned long)distance,(long)direction);
+//    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
     
-    return NO;
+    
+    [hidingView invalidate];
+    if (self.controllerAreaView.hidden == YES) {
+        self.controllerAreaView.hidden = NO;
+        hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+    } else {
+        if ((long)direction == 1) {
+            level += 0.05;
+            [[MPMusicPlayerController applicationMusicPlayer] setVolume:level];
+            hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+
+        } else {
+            level -= 0.05;
+            [[MPMusicPlayerController applicationMusicPlayer] setVolume:level];
+            hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+
+        }
+    }
+    return YES;
 }
 
 - (BOOL)umaDidTranslateWithDistance:(NSInteger)distanceX distanceY:(NSInteger)distanceY
 {
     kkpTriggered = YES;
     [hidingView invalidate];
-    NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
-    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
+//    NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
+//    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
     indexFocus = [_focusManager focusIndex];
     if (spinnerFact) {
         return YES;
@@ -1034,7 +1061,7 @@ float level = 0.0;
 
 - (BOOL)umaDidPressUpButton:(UMAInputButtonType)button
 {
-    [hidingView invalidate];
+
     NSLog(@"press %@",[self getButtonName:button]);
     if ([[self getButtonName:button] isEqualToString:@"Main"]) {
         UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
@@ -1051,16 +1078,14 @@ float level = 0.0;
         return YES;
     }
     
-    
     if ([[self getButtonName:button] isEqualToString:@"VR"]) {
         //fullscreen
         //-call control
         //tableview
         //-refresh
+        
         if (self.controllerAreaView.hidden == YES && self.youtubeTableView.hidden == YES) {
-            NSLog(@"showing controller");
             self.controllerAreaView.hidden = NO;
-            
             [hidingView invalidate];
             hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
         }
@@ -1070,6 +1095,22 @@ float level = 0.0;
             [self callYoutube:self.regionJp];
         }
         
+    }
+    
+    if ([[self getButtonName:button] isEqualToString:@"Back"]) {
+        
+        [hidingView invalidate];
+        if (self.controllerAreaView.hidden == NO && self.youtubeTableView.hidden == YES) {
+            self.controllerAreaView.hidden = YES;
+            
+        } else if (self.controllerAreaView.hidden == YES && self.youtubeTableView.hidden == YES) {
+            [self hideWithFact:NO];
+            hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+            
+        } else {
+            [self hideWithFact:YES];
+
+        }
     }
     
     return YES;
@@ -1082,7 +1123,27 @@ float level = 0.0;
 
 - (BOOL)umaDidLongPressButton:(UMAInputButtonType)button state:(UMAInputGestureRecognizerState)state
 {
-    
+    [hidingView invalidate];
+    if (self.controllerAreaView.hidden == YES) {
+        self.controllerAreaView.hidden = NO;
+        hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+    } else {
+        if ([[self getButtonName:button] isEqualToString:@"Right"]) {
+            if (state == 0) {
+                isSeekForward = true;
+            } else {
+                isSeekForward = false;
+            }
+        } else if ([[self getButtonName:button] isEqualToString:@"Left"]){
+            if (state == 0) {
+                isSeekBackward = true;
+            } else {
+                isSeekBackward = false;
+            }
+        }
+    }
+   
+
     return YES;
 }
 
