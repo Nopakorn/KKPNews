@@ -710,13 +710,25 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 item = 0;
                 refreshFact = NO;
                 NSLog(@"fact YES ended");
+                
             } else {
-                item+=1;
+                
+                if (item == [self.youtube.data count]-1) {
+                    item = 0;
+                    [_focusManager setFocusRootView:self.youtubeTableView];
+                    [_focusManager moveFocus:1 direction:1];
+                    [self.timerProgress invalidate];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                    
+                } else {
+                    item+=1;
+                    [self.timerProgress invalidate];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                }
             }
-
-            [self.timerProgress invalidate];
-            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-            [self.youtubeTableView reloadData];
+            
         }
         
         
@@ -755,12 +767,23 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 refreshFact = NO;
                 NSLog(@"fact YES unstarted");
             } else {
-                item+=1;
+                if (item == [self.youtube.data count]-1) {
+                    item = 0;
+                    [_focusManager setFocusRootView:self.youtubeTableView];
+                    [_focusManager moveFocus:1 direction:1];
+                    [self.timerProgress invalidate];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                    
+                } else {
+                    item+=1;
+                    [self.timerProgress invalidate];
+                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                }
+
             }
-            
-            [self.timerProgress invalidate];
-            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-            [self.youtubeTableView reloadData];
+          
         }
 
     } else if (state == kYTPlayerStateBuffering){
