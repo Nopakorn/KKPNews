@@ -35,6 +35,8 @@
 @property (strong, nonatomic) NSTimer *timerProgress;
 @property (nonatomic) NSTimeInterval playerTotalTime;
 
+@property (nonatomic, retain) NSMutableArray *videoPlaylist;
+
 @property (weak, nonatomic) IBOutlet UILabel *dateTimeLabel;
 
 @property (weak, nonatomic) IBOutlet UIButton *refreshButton;
