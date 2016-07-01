@@ -264,37 +264,48 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 - (void)viewDidLayoutSubviews
 {
     if ([UIScreen mainScreen].bounds.size.width < [UIScreen mainScreen].bounds.size.height) {
-        if (self.youtubeTableView.hidden == true) {
-            if (self.controllerAreaView.hidden == NO) {
-                self.btmControlAreaConstraint.constant = 0;
-                self.heightControllerAreaConstraint.constant = 44;
-            } else {
-                self.btmControlAreaConstraint.constant = 0;
-                self.heightControllerAreaConstraint.constant = 0;
-            }
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
         } else {
-            self.btmControlAreaConstraint.constant = 320;
-            self.heightControllerAreaConstraint.constant = 44;
+            
+            if (self.youtubeTableView.hidden == true) {
+                if (self.controllerAreaView.hidden == NO) {
+                    self.btmControlAreaConstraint.constant = 0;
+                    self.heightControllerAreaConstraint.constant = 44;
+                } else {
+                    self.btmControlAreaConstraint.constant = 0;
+                    self.heightControllerAreaConstraint.constant = 0;
+                }
+                
+            } else {
+                self.btmControlAreaConstraint.constant = 320;
+                self.heightControllerAreaConstraint.constant = 44;
+            }
         }
-
-    } else {
         
-        if (self.youtubeTableView.hidden == true) {
-            
-            if (self.controllerAreaView.hidden == NO) {
-                self.playerViewTrailingConstraint.constant = 0;
-                self.heightControllerAreaConstraint.constant = 44;
-            } else {
-                self.playerViewTrailingConstraint.constant = 0;
-                self.heightControllerAreaConstraint.constant = 0;
-            }
-   
+        
+        
+    } else {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        
         } else {
-            
-            self.playerViewTrailingConstraint.constant = 320;
-            self.heightControllerAreaConstraint.constant = 44;
+            if (self.youtubeTableView.hidden == true) {
+                
+                if (self.controllerAreaView.hidden == NO) {
+                    self.playerViewTrailingConstraint.constant = 0;
+                    self.heightControllerAreaConstraint.constant = 44;
+                } else {
+                    self.playerViewTrailingConstraint.constant = 0;
+                    self.heightControllerAreaConstraint.constant = 0;
+                }
+                
+            } else {
+                
+                self.playerViewTrailingConstraint.constant = 320;
+                self.heightControllerAreaConstraint.constant = 44;
+            }
         }
+        
         
     }
 }

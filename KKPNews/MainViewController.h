@@ -54,4 +54,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *dateAreaView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *playerViewTrailingConstraint;
+
+
 @end
