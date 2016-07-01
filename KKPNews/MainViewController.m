@@ -277,27 +277,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
             self.btmControlAreaConstraint.constant = 320;
             self.heightControllerAreaConstraint.constant = 44;
         }
-        
-//        if (kkpTriggered) {
-//            if (indexFocus == [self.youtube.data count]-1) {
-//                [_focusManager moveFocus:1];
-//            } else {
-//                
-//                if (indexFocus == 0) {
-//                    if (directionFocus == 1) {
-//                        [_focusManager moveFocus:indexFocus];
-//                    } else {
-//                        [_focusManager moveFocus:[_focusManager focusIndex]];
-//                    }
-//                    
-//                } else {
-//                    [_focusManager moveFocus:indexFocus];
-//                }
-//                
-//            }
-//
-//        }
-        
+
     } else {
         
         if (self.youtubeTableView.hidden == true) {
@@ -316,28 +296,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
             self.heightControllerAreaConstraint.constant = 44;
         }
         
-        
-//        if (kkpTriggered) {
-//            if (indexFocus == [self.youtube.data count]-1) {
-//                [_focusManager moveFocus:1];
-//            } else {
-//                
-//                if (indexFocus == 0) {
-//                    if (directionFocus == 1) {
-//                        [_focusManager moveFocus:indexFocus];
-//                    } else {
-//                        [_focusManager moveFocus:[_focusManager focusIndex]];
-//                    }
-//                    
-//                } else {
-//                    [_focusManager moveFocus:indexFocus];
-//                }
-//                
-//            }
-//            
-//        }
-
-
     }
 }
 

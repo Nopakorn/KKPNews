@@ -3,79 +3,79 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "icon@2x.png",
+      "filename" : "icon_v4(58)-1.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "icon@3x.png",
+      "filename" : "icon_v4(87).png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "icon40@2x.png",
+      "filename" : "icon_v4(80)-1.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "icon40@3x.png",
+      "filename" : "icon_v4(120).png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "icon60@2x.png",
+      "filename" : "icon_v4(120)-1.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "icon60@3x.png",
+      "filename" : "icon_v4(180).png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "icon.png",
+      "filename" : "icon_v4(29).png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "icon@2x-1.png",
+      "filename" : "icon_v4(58).png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "icon40-1.png",
+      "filename" : "icon_v4(40).png",
       "scale" : "1x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "icon40@2x-1.png",
+      "filename" : "icon_v4(80).png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "icon76.png",
+      "filename" : "icon_v4(76).png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "icon76@2x.png",
+      "filename" : "icon_v4(152).png",
       "scale" : "2x"
     },
     {
       "size" : "83.5x83.5",
       "idiom" : "ipad",
-      "filename" : "icon167.png",
+      "filename" : "icon_v4(167).png",
       "scale" : "2x"
     }
   ],

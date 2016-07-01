@@ -34,6 +34,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ipad_pt(w5-6)2x" translatesAutoresizingMaskIntoConstraints="NO" id="T9w-eI-MGg">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iphone_ls(5.5)" translatesAutoresizingMaskIntoConstraints="NO" id="lQT-cc-JKP">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </imageView>
@@ -55,9 +58,12 @@
                         <constraints>
                             <constraint firstItem="4hc-8s-rph" firstAttribute="top" secondItem="uOT-Wq-8yz" secondAttribute="bottom" id="6eh-Hg-RA5"/>
                             <constraint firstItem="NjT-NO-YnH" firstAttribute="top" secondItem="4hc-8s-rph" secondAttribute="bottom" id="AIm-5F-bCN"/>
+                            <constraint firstAttribute="trailing" secondItem="T9w-eI-MGg" secondAttribute="trailing" id="AmU-zK-xPr"/>
                             <constraint firstItem="KlV-iw-a7J" firstAttribute="centerX" secondItem="0iv-IQ-GPk" secondAttribute="centerX" id="FKF-xd-nPb"/>
+                            <constraint firstItem="T9w-eI-MGg" firstAttribute="top" secondItem="uOT-Wq-8yz" secondAttribute="bottom" id="LYl-gN-mHF"/>
                             <constraint firstItem="KlV-iw-a7J" firstAttribute="leading" secondItem="0iv-IQ-GPk" secondAttribute="leading" id="LdO-q1-sjt"/>
                             <constraint firstItem="KlV-iw-a7J" firstAttribute="top" secondItem="uOT-Wq-8yz" secondAttribute="bottom" id="MU4-Kv-5CH"/>
+                            <constraint firstItem="NjT-NO-YnH" firstAttribute="top" secondItem="T9w-eI-MGg" secondAttribute="bottom" id="Mj2-d6-FDs"/>
                             <constraint firstItem="PG2-nv-5uI" firstAttribute="centerX" secondItem="0iv-IQ-GPk" secondAttribute="centerX" id="UZT-cW-olz"/>
                             <constraint firstItem="PG2-nv-5uI" firstAttribute="centerY" secondItem="0iv-IQ-GPk" secondAttribute="centerY" id="W4A-PB-Iiw"/>
                             <constraint firstItem="NjT-NO-YnH" firstAttribute="top" secondItem="lQT-cc-JKP" secondAttribute="bottom" id="WOT-jg-wL7"/>
@@ -69,6 +75,7 @@
                             </constraint>
                             <constraint firstAttribute="trailing" secondItem="lQT-cc-JKP" secondAttribute="trailing" id="hrX-rS-kGr"/>
                             <constraint firstItem="lQT-cc-JKP" firstAttribute="leading" secondItem="0iv-IQ-GPk" secondAttribute="leading" id="i3d-xp-OOp"/>
+                            <constraint firstItem="T9w-eI-MGg" firstAttribute="leading" secondItem="0iv-IQ-GPk" secondAttribute="leading" id="naP-LY-tRr"/>
                             <constraint firstAttribute="trailing" secondItem="4hc-8s-rph" secondAttribute="trailing" id="nxV-8E-61C"/>
                             <constraint firstItem="NjT-NO-YnH" firstAttribute="top" secondItem="KlV-iw-a7J" secondAttribute="bottom" id="oS8-Yn-RYF"/>
                             <constraint firstItem="KlV-iw-a7J" firstAttribute="centerY" secondItem="0iv-IQ-GPk" secondAttribute="centerY" id="qhZ-67-7Jz"/>
@@ -78,6 +85,7 @@
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
+                                <exclude reference="T9w-eI-MGg"/>
                                 <exclude reference="lQT-cc-JKP"/>
                                 <exclude reference="KlV-iw-a7J"/>
                             </mask>
@@ -90,10 +98,14 @@
                                 <exclude reference="c2q-Ap-Yd2"/>
                                 <exclude reference="hrX-rS-kGr"/>
                                 <exclude reference="i3d-xp-OOp"/>
+                                <exclude reference="AmU-zK-xPr"/>
+                                <exclude reference="LYl-gN-mHF"/>
+                                <exclude reference="naP-LY-tRr"/>
                                 <exclude reference="UZT-cW-olz"/>
                                 <exclude reference="W4A-PB-Iiw"/>
                                 <exclude reference="WYq-Qo-8XR"/>
                                 <exclude reference="xfK-UQ-dbJ"/>
+                                <exclude reference="Mj2-d6-FDs"/>
                                 <exclude reference="WOT-jg-wL7"/>
                                 <exclude reference="oS8-Yn-RYF"/>
                             </mask>
@@ -137,20 +149,29 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
                             <mask key="subviews">
-                                <include reference="4hc-8s-rph"/>
+                                <include reference="T9w-eI-MGg"/>
+                                <exclude reference="4hc-8s-rph"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="AmU-zK-xPr"/>
+                                <include reference="LYl-gN-mHF"/>
+                                <include reference="naP-LY-tRr"/>
+                                <include reference="Mj2-d6-FDs"/>
                             </mask>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="bPH-xv-aou"/>
                     <connections>
+                        <outlet property="ipadImageScreen" destination="T9w-eI-MGg" id="h7k-Kb-PIT"/>
                         <outlet property="spinner" destination="PG2-nv-5uI" id="onr-aF-t1x"/>
+                        <outlet property="spinnerBtmConstraint" destination="fu4-v6-g2x" id="NSz-gC-C26"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="mainSegue" id="VRd-FK-ph5"/>
                         <segue destination="usz-zc-etL" kind="modal" identifier="TutorialPhase" id="dby-7Y-dEd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ilL-dJ-Tva" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-143" y="-537"/>
+            <point key="canvasLocation" x="-143.25" y="-537"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -314,12 +335,20 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.13725490196078433" green="0.51764705882352946" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="rDO-Ni-ahO" firstAttribute="top" secondItem="Ptc-Nz-TG0" secondAttribute="top" constant="4" id="9Se-Vf-HY5"/>
+                                    <constraint firstAttribute="bottom" secondItem="rDO-Ni-ahO" secondAttribute="bottom" constant="3" id="MsH-rd-jhN"/>
                                     <constraint firstAttribute="height" constant="24" id="bAP-Lj-lEC"/>
                                     <constraint firstItem="rDO-Ni-ahO" firstAttribute="centerX" secondItem="Ptc-Nz-TG0" secondAttribute="centerX" id="pk9-B1-c7c"/>
                                     <constraint firstItem="jfR-NK-5rO" firstAttribute="top" secondItem="Ptc-Nz-TG0" secondAttribute="top" id="q3P-y5-w3v"/>
                                     <constraint firstItem="rDO-Ni-ahO" firstAttribute="centerY" secondItem="Ptc-Nz-TG0" secondAttribute="centerY" id="sWP-Mp-giY"/>
                                     <constraint firstAttribute="trailing" secondItem="jfR-NK-5rO" secondAttribute="trailing" constant="8" id="zwd-bv-Z7K"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="9Se-Vf-HY5"/>
+                                        <exclude reference="MsH-rd-jhN"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="89" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kkv-kZ-WIY">
                                 <rect key="frame" x="0.0" y="304" width="600" height="296"/>
@@ -383,7 +412,7 @@
                             </constraint>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="QU5-yG-pLC" secondAttribute="bottom" id="PYO-5O-ew3"/>
                             <constraint firstItem="Ptc-Nz-TG0" firstAttribute="leading" secondItem="QU5-yG-pLC" secondAttribute="trailing" id="Prj-08-aQO"/>
-                            <constraint firstItem="Ptc-Nz-TG0" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="bottom" id="QQ4-SX-JMF"/>
+                            <constraint firstItem="Ptc-Nz-TG0" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="bottom" identifier="connector" id="QQ4-SX-JMF"/>
                             <constraint firstAttribute="trailing" secondItem="QU5-yG-pLC" secondAttribute="trailing" id="R6u-8W-2kW"/>
                             <constraint firstItem="RMw-rs-02i" firstAttribute="top" secondItem="QU5-yG-pLC" secondAttribute="bottom" id="SZz-bK-ly8"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="bottom" id="TPc-8C-F77"/>
@@ -890,6 +919,7 @@
         <image name="circle_2" width="147" height="19"/>
         <image name="circle_3" width="147" height="19"/>
         <image name="circle_4" width="147" height="19"/>
+        <image name="ipad_pt(w5-6)2x" width="1536" height="2008"/>
         <image name="iphone_ls(5.5)" width="2208" height="1242"/>
         <image name="iphone_pt(4.7)" width="750" height="1334"/>
         <image name="nextButtonTutorial" width="21" height="31"/>

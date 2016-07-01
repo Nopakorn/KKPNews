@@ -15,4 +15,6 @@
 @property (strong, nonatomic) Youtube *youtube;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *spinnerBtmConstraint;
+@property (weak, nonatomic) IBOutlet UIImageView *ipadImageScreen;
 @end
