@@ -339,7 +339,9 @@
                             <constraint firstItem="Xpy-lw-uk6" firstAttribute="centerX" secondItem="kkv-kZ-WIY" secondAttribute="centerX" id="Gto-lL-bxx"/>
                             <constraint firstItem="kkv-kZ-WIY" firstAttribute="top" secondItem="Ptc-Nz-TG0" secondAttribute="bottom" id="Lcs-Lj-F09"/>
                             <constraint firstAttribute="trailing" secondItem="QU5-yG-pLC" secondAttribute="trailing" constant="320" id="Lod-o5-FOG">
+                                <variation key="heightClass=compact-widthClass=compact" constant="200"/>
                                 <variation key="heightClass=compact-widthClass=regular" constant="320"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="400"/>
                             </constraint>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="RMw-rs-02i" secondAttribute="bottom" constant="320" id="Onl-h2-Ep2">
                                 <variation key="heightClass=regular-widthClass=compact" constant="320"/>
@@ -423,6 +425,15 @@
                                 <include reference="UXW-8k-Tkl"/>
                                 <exclude reference="YSV-1R-8jb"/>
                                 <exclude reference="lcX-WJ-a2m"/>
+                                <exclude reference="Onl-h2-Ep2"/>
+                                <include reference="XDb-wC-dZ3"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="Lod-o5-FOG"/>
+                                <exclude reference="R6u-8W-2kW"/>
+                                <include reference="UXW-8k-Tkl"/>
                                 <exclude reference="Onl-h2-Ep2"/>
                                 <include reference="XDb-wC-dZ3"/>
                             </mask>

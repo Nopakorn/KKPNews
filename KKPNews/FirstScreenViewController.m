@@ -56,16 +56,6 @@
 
 
 }
-//- (UITraitCollection *)overrideTraitCollectionForChildViewController:(UIViewController *)childViewController
-//{
-//    if (CGRectGetWidth(self.view.bounds) < CGRectGetHeight(self.view.bounds)) {
-//        NSLog(@"sc portrait");
-//        return [UITraitCollection traitCollectionWithHorizontalSizeClass:UIUserInterfaceSizeClassCompact];
-//    } else {
-//        NSLog(@"sc land");
-//        return [UITraitCollection traitCollectionWithHorizontalSizeClass:UIUserInterfaceSizeClassRegular];
-//    }
-//}
 
 - (void)viewDidAppear:(BOOL)animated
 {
