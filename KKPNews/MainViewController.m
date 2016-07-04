@@ -104,7 +104,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     spinnerFact = NO;
     self.loadingSpinner.hidden = YES;
     [self playlingYoutube];
-   
     //customize progressbar
     UIImage *new = [UIImage imageNamed:@"thumbnail.png"];
     UIImage *myNewThumbnail = [MainViewController imageWithImage:new scaledToSize:CGSizeMake(20, 20)];
@@ -159,7 +158,10 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                                     WithDiscoveryInterval:kHidDeviceControlTimeout
                                     WithConnectionTimeout:kHidDeviceControlTimeout];
     [_hidManager startDiscoverWithDeviceName:nil];
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -264,10 +266,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 - (void)viewDidLayoutSubviews
 {
     if ([UIScreen mainScreen].bounds.size.width < [UIScreen mainScreen].bounds.size.height) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
-        } else {
-            
+
             if (self.youtubeTableView.hidden == true) {
                 if (self.controllerAreaView.hidden == NO) {
                     self.btmControlAreaConstraint.constant = 0;
@@ -278,17 +277,18 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 }
                 
             } else {
-                self.btmControlAreaConstraint.constant = 320;
-                self.heightControllerAreaConstraint.constant = 44;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    self.btmControlAreaConstraint.constant = 400;
+                    self.heightControllerAreaConstraint.constant = 44;
+                } else {
+                    self.btmControlAreaConstraint.constant = 320;
+                    self.heightControllerAreaConstraint.constant = 44;
+                }
+                
             }
-        }
-        
-        
-        
+
     } else {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         
-        } else {
             if (self.youtubeTableView.hidden == true) {
                 
                 if (self.controllerAreaView.hidden == NO) {
@@ -300,13 +300,15 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 }
                 
             } else {
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    self.playerViewTrailingConstraint.constant = 400;
+                    self.heightControllerAreaConstraint.constant = 44;
+                } else {
+                    self.playerViewTrailingConstraint.constant = 320;
+                    self.heightControllerAreaConstraint.constant = 44;
+                }
                 
-                self.playerViewTrailingConstraint.constant = 320;
-                self.heightControllerAreaConstraint.constant = 44;
             }
-        }
-        
-        
     }
 }
 
@@ -317,7 +319,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 
 - (void)handleTapPressedOnWebView:(UIGestureRecognizer *)gestureRecognizer
 {
-    NSLog(@"tap on");
     [self hideWithFact:NO];
     [hidingView invalidate];
      hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];

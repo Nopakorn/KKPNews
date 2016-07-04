@@ -34,7 +34,7 @@
         [umaApp startProjection];
     } else {
     }
-
+    
     return YES;
 }
 

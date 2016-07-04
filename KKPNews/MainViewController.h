@@ -16,6 +16,8 @@
 {
     UIActivityIndicatorView *spinner;
     NSTimer *hidingView;
+    
+    
 }
 
 //@property (nonatomic) UMAApplication *umaApp;

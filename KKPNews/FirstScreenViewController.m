@@ -54,7 +54,18 @@
     item = 0;
     videoIdString = @"";
 
+
 }
+//- (UITraitCollection *)overrideTraitCollectionForChildViewController:(UIViewController *)childViewController
+//{
+//    if (CGRectGetWidth(self.view.bounds) < CGRectGetHeight(self.view.bounds)) {
+//        NSLog(@"sc portrait");
+//        return [UITraitCollection traitCollectionWithHorizontalSizeClass:UIUserInterfaceSizeClassCompact];
+//    } else {
+//        NSLog(@"sc land");
+//        return [UITraitCollection traitCollectionWithHorizontalSizeClass:UIUserInterfaceSizeClassRegular];
+//    }
+//}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -73,8 +84,9 @@
     } else {
         [self performSegueWithIdentifier:@"TutorialPhase" sender:@0];
     }
-
+    //[self performSegueWithIdentifier:@"mainSegue" sender:nil];
 }
+
 
 - (void)viewDidLayoutSubviews
 {

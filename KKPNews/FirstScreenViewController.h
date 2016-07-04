@@ -10,7 +10,9 @@
 #import "Youtube.h"
 
 @interface FirstScreenViewController : UIViewController<UIAlertViewDelegate>
+{
 
+}
 
 @property (strong, nonatomic) Youtube *youtube;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
