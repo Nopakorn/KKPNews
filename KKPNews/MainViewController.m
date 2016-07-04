@@ -268,21 +268,27 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     if ([UIScreen mainScreen].bounds.size.width < [UIScreen mainScreen].bounds.size.height) {
 
             if (self.youtubeTableView.hidden == true) {
+                self.refreshButton.hidden = YES;
                 if (self.controllerAreaView.hidden == NO) {
                     self.btmControlAreaConstraint.constant = 0;
                     self.heightControllerAreaConstraint.constant = 44;
+                    self.heighDateAreaConstraint.constant = 0;
                 } else {
                     self.btmControlAreaConstraint.constant = 0;
                     self.heightControllerAreaConstraint.constant = 0;
+                    self.heighDateAreaConstraint.constant = 0;
                 }
                 
             } else {
+                self.refreshButton.hidden = NO;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                     self.btmControlAreaConstraint.constant = 400;
                     self.heightControllerAreaConstraint.constant = 44;
+                    self.heighDateAreaConstraint.constant = 24;
                 } else {
                     self.btmControlAreaConstraint.constant = 320;
                     self.heightControllerAreaConstraint.constant = 44;
+                    self.heighDateAreaConstraint.constant = 24;
                 }
                 
             }
@@ -290,22 +296,27 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     } else {
         
             if (self.youtubeTableView.hidden == true) {
-                
+                self.refreshButton.hidden = YES;
                 if (self.controllerAreaView.hidden == NO) {
                     self.playerViewTrailingConstraint.constant = 0;
                     self.heightControllerAreaConstraint.constant = 44;
+                    self.heighDateAreaConstraint.constant = 0;
                 } else {
                     self.playerViewTrailingConstraint.constant = 0;
                     self.heightControllerAreaConstraint.constant = 0;
+                    self.heighDateAreaConstraint.constant = 0;
                 }
                 
             } else {
+                self.refreshButton.hidden = NO;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                     self.playerViewTrailingConstraint.constant = 400;
                     self.heightControllerAreaConstraint.constant = 44;
+                     self.heighDateAreaConstraint.constant = 24;
                 } else {
                     self.playerViewTrailingConstraint.constant = 320;
                     self.heightControllerAreaConstraint.constant = 44;
+                    self.heighDateAreaConstraint.constant = 24;
                 }
                 
             }
