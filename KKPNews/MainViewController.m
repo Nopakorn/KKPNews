@@ -83,6 +83,9 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     BOOL loadApiFact;
     BOOL alertFact;
     BOOL videoEndedFact;
+    
+    BOOL moveDown;
+    BOOL moveUp;
 }
 
 @synthesize youtube;
@@ -128,6 +131,9 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     loadApiFact = NO;
     alertFact = NO;
     videoEndedFact = NO;
+    moveUp = NO;
+    moveDown = NO;
+    
 #pragma setup UMA in ViewDidload
     _inputDevices = [NSMutableArray array];
     _umaApp = [UMAApplication sharedApplication];
@@ -238,9 +244,13 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     alertFact = NO;
     if (internetActive) {
         if (videoEndedFact) {
-            NSLog(@"end state");
+            
             [self playerView:self.playerView didChangeToState:kYTPlayerStateEnded];
             videoEndedFact = NO;
+        }
+        
+        if ([self.playerView playerState] == kYTPlayerStatePaused) {
+            [self.playerView playVideo];
         }
         
         if (loadApiFact) {
@@ -249,13 +259,12 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
                 [self callYoutube:self.regionJp];
-                NSLog(@"call youtube api internet active");
             }
         }
         
         
     } else {
-        NSLog(@"no internet");
+
         alertFact = YES;
         loadApiFact = YES;
         NSString *description = [NSString stringWithFormat:NSLocalizedString(@"Can Not Connected To The Internet.", nil)];
@@ -282,7 +291,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 }
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
-    //UIGraphicsBeginImageContext(newSize);
+
     UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -816,16 +825,29 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                         [self.youtubeTableView reloadData];
                         
                     } else {
-                        item+=1;
-                        [self.timerProgress invalidate];
-                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                        [self.youtubeTableView reloadData];
+                        if (moveDown) {
+                            NSLog(@"continue move down");
+                            item+=1;
+                            [_focusManager moveFocus:1 direction:kUMAFocusForward];
+                            [self.timerProgress invalidate];
+                            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                            [self.youtubeTableView reloadData];
+                        }
+                        
+                        if (moveUp) {
+                            NSLog(@"continue move up");
+                            item-=1;
+                            [_focusManager moveFocus:1 direction:kUMAFocusBackward];
+                            [self.timerProgress invalidate];
+                            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                            [self.youtubeTableView reloadData];
+                        }
+                        
                     }
                 }
                 
             }
         } else {
-            NSLog(@"NO internet");
             [self.timerProgress invalidate];
             [self.playerView pauseVideo];
         }
@@ -857,7 +879,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
         
     } else if (state == kYTPlayerStateUnstarted) {
-        
         if(spinnerFact){
             NSLog(@"still loading");
         } else {
@@ -880,10 +901,24 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                     [self.youtubeTableView reloadData];
                     
                 } else {
-                    item+=1;
-                    [self.timerProgress invalidate];
-                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                    [self.youtubeTableView reloadData];
+                    if (moveDown) {
+                        NSLog(@"continue move down");
+                        item+=1;
+                        [_focusManager moveFocus:1 direction:kUMAFocusForward];
+                        [self.timerProgress invalidate];
+                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                        [self.youtubeTableView reloadData];
+                    }
+                    
+                    if (moveUp) {
+                        NSLog(@"continue move up");
+                        item-=1;
+                        [_focusManager moveFocus:1 direction:kUMAFocusBackward];
+                        [self.timerProgress invalidate];
+                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                        [self.youtubeTableView reloadData];
+                    }
+
                 }
 
             }
@@ -974,16 +1009,13 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
         [self.youtubeTableView reloadData];
         
-        [_focusManager setFocusRootView:self.youtubeTableView];
-        indexFocus = [_focusManager focusIndex];
-        
-        if (indexFocus > item) {
-            [_focusManager moveFocus:item direction:kUMAFocusBackward];
-        } else if (indexFocus < item) {
-            [_focusManager moveFocus:item direction:kUMAFocusForward];
+        NSInteger indexF = [_focusManager focusIndex];
+        if (indexF > item) {
+            [_focusManager moveFocus:indexF-item direction:kUMAFocusBackward];
+        } else if (indexF < item) {
+            [_focusManager moveFocus:item-indexF direction:kUMAFocusForward];
         }
-        
-        
+
     } else {
         NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The internet is not available.", nil)];
         
@@ -1114,128 +1146,137 @@ float level = 0.0;
 
 - (BOOL)umaDidTranslateWithDistance:(NSInteger)distanceX distanceY:(NSInteger)distanceY
 {
-    kkpTriggered = YES;
-    [hidingView invalidate];
-    NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
-    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
-    indexFocus = [_focusManager focusIndex];
-    if (spinnerFact) {
-        
-        if ((distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1) ) {
-            NSLog(@"Right");
-            if (item == [self.videoPlaylist count]-1) {
-                item = 0;
-                [self.timerProgress invalidate];
-                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
-                [self.youtubeTableView reloadData];
-            } else {
-                
-                item+=1;
-                [self.timerProgress invalidate];
-                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
-                [self.youtubeTableView reloadData];
-            }
-            
-            
-        } else if ((distanceX == -1 && distanceY == 0) || (distanceX == 0 && distanceY == -1)) {
-
-            if (item == 0) {
-                item = [self.videoPlaylist count]-1;
-                [self.timerProgress invalidate];
-                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
-                [self.youtubeTableView reloadData];
-            } else {
-                item-=1;
-                [self.timerProgress invalidate];
-                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
-                [self.youtubeTableView reloadData];
-                
-            }
-        }
-        NSLog(@"item : %ld",(long)item);
+    if (!internetActive) {
+        [self.playerView pauseVideo];
         return YES;
-        
     } else {
-        if (refreshFact) {
-            item = 0;
-            [_focusManager setFocusRootView:self.youtubeTableView];
-            [_focusManager moveFocus:1 direction:1];
+        kkpTriggered = YES;
+        [hidingView invalidate];
+//        NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
+//        NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
+        indexFocus = [_focusManager focusIndex];
+        if (spinnerFact) {
             
-            [self.timerProgress invalidate];
-            UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-            [self.youtubeTableView reloadData];
-            refreshFact = NO;
+            if ((distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1) ) {
+                moveDown = YES;
+                moveUp = NO;
+                if (item == [self.videoPlaylist count]-1) {
+                    item = 0;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                } else {
+                    
+                    item+=1;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                }
+                
+                
+            } else if ((distanceX == -1 && distanceY == 0) || (distanceX == 0 && distanceY == -1)) {
+                moveUp = YES;
+                moveDown = NO;
+                if (item == 0) {
+                    item = [self.videoPlaylist count]-1;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                } else {
+                    item-=1;
+                    [self.timerProgress invalidate];
+                    UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                    [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                    [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
+                    [self.youtubeTableView reloadData];
+                    
+                }
+            }
             return YES;
             
         } else {
-            if (self.controllerAreaView.hidden == YES) {
-                self.controllerAreaView.hidden = NO;
+            if (refreshFact) {
+                item = 0;
+                [_focusManager setFocusRootView:self.youtubeTableView];
+                [_focusManager moveFocus:1 direction:1];
+                
+                [self.timerProgress invalidate];
+                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                [self.youtubeTableView reloadData];
+                refreshFact = NO;
+                return YES;
+                
             } else {
-                if ((distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1) ) {
-                    if (item == [self.youtube.data count]-1) {
-                        item = 0;
-                        [self.timerProgress invalidate];
-                        UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                        [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                        [self.youtubeTableView reloadData];
-                    } else {
+                if (self.controllerAreaView.hidden == YES) {
+                    self.controllerAreaView.hidden = NO;
+                } else {
+                    if ((distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1) ) {
+                        moveDown = YES;
+                        moveUp = NO;
+                        if (item == [self.youtube.data count]-1) {
+                            item = 0;
+                            [self.timerProgress invalidate];
+                            UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                            [self.youtubeTableView reloadData];
+                        } else {
+                            
+                            item+=1;
+                            [self.timerProgress invalidate];
+                            UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                            [self.youtubeTableView reloadData];
+                        }
                         
-                        item+=1;
-                        [self.timerProgress invalidate];
-                        UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                        [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                        [self.youtubeTableView reloadData];
+                        
+                    } else if ((distanceX == -1 && distanceY == 0) || (distanceX == 0 && distanceY == -1)) {
+                        moveUp = YES;
+                        moveDown = NO;
+                        if (item == 0) {
+                            item = [self.youtube.data count]-1;
+                            [self.timerProgress invalidate];
+                            UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                            [self.youtubeTableView reloadData];
+                        } else {
+                            item-=1;
+                            [self.timerProgress invalidate];
+                            UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                            [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                            [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                            [self.youtubeTableView reloadData];
+                            
+                        }
                     }
-                    
-                    
-                } else if ((distanceX == -1 && distanceY == 0) || (distanceX == 0 && distanceY == -1)) {
-
-                    if (item == 0) {
-                        item = [self.youtube.data count]-1;
-                        [self.timerProgress invalidate];
-                        UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                        [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                        [self.youtubeTableView reloadData];
-                    } else {
-                        item-=1;
-                        [self.timerProgress invalidate];
-                        UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
-                        [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
-                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                        [self.youtubeTableView reloadData];
-                        
+                    if (distanceX == 0 && distanceY == 1) {
+                        directionFocus = 0;
+                        indexFocus+=2;
+                        [_focusManager moveFocus:1 direction:kUMAFocusForward];
+                    } else if (distanceX == 0 && distanceY == -1) {
+                        directionFocus = 1;
+                        [_focusManager moveFocus:1 direction:kUMAFocusBackward];
                     }
                 }
-                if (distanceX == 0 && distanceY == 1) {
-                    directionFocus = 0;
-                    indexFocus+=2;
-                    [_focusManager moveFocus:1 direction:kUMAFocusForward];
-                } else if (distanceX == 0 && distanceY == -1) {
-                    directionFocus = 1;
-                    [_focusManager moveFocus:1 direction:kUMAFocusBackward];
-                }
+                hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+                return NO;
+                
             }
-            hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
-            NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
-            return NO;
-
+            
         }
-        
-    }
 
+    }
+   
 }
 
 
@@ -1274,8 +1315,6 @@ float level = 0.0;
 
 - (BOOL)umaDidPressUpButton:(UMAInputButtonType)button
 {
-
-    NSLog(@"press %@",[self getButtonName:button]);
     if ([[self getButtonName:button] isEqualToString:@"Main"]) {
         UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
         UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
@@ -1297,11 +1336,6 @@ float level = 0.0;
     }
     
     if ([[self getButtonName:button] isEqualToString:@"VR"]) {
-        //fullscreen
-        //-call control
-        //tableview
-        //-refresh
-        
         if (self.controllerAreaView.hidden == YES && self.youtubeTableView.hidden == YES) {
             self.controllerAreaView.hidden = NO;
             [hidingView invalidate];
