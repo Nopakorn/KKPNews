@@ -160,6 +160,8 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
     [hidingView invalidate];
 }
 
@@ -191,6 +193,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     switch (internetStatus) {
         case NotReachable:
         {
+            NSLog(@"notReachable");
             internetActive = NO;
             alertFact = YES;
             break;
@@ -198,6 +201,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         }
         case ReachableViaWiFi:
         {
+            NSLog(@"reachableWifi");
             internetActive = YES;
             alertFact = YES;
             break;
@@ -205,6 +209,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         }
         case ReachableViaWWAN:
         {
+            NSLog(@"reachableWWAN");
             internetActive = YES;
             alertFact = YES;
             break;
@@ -243,6 +248,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     NSLog(@"show network status %id",internetActive);
     alertFact = NO;
     if (internetActive) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
         if (videoEndedFact) {
             
             [self playerView:self.playerView didChangeToState:kYTPlayerStateEnded];
