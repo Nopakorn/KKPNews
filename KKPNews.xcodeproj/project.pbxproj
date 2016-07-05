@@ -23,6 +23,7 @@
 		5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5A33C41D112C9E005D7109 /* FirstScreenViewController.m */; };
 		5C60078D1D22326F00176B4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5C60078F1D22326F00176B4B /* Localizable.strings */; };
 		5C6A031E1D2A4F5E00B8172A /* TraitCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C6A031D1D2A4F5E00B8172A /* TraitCollectionViewController.m */; };
+		5C6A03211D2A7A9100B8172A /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C6A03201D2A7A9100B8172A /* Reachability.m */; };
 		5CD1088D1D23A75D000303BE /* UIEMultiAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1088C1D23A75D000303BE /* UIEMultiAccess.framework */; };
 		5CD1088F1D23A769000303BE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1088E1D23A769000303BE /* CoreMedia.framework */; };
 		5CD108911D23A779000303BE /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108901D23A779000303BE /* ExternalAccessory.framework */; };
@@ -93,6 +94,8 @@
 		5C6007901D22327100176B4B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5C6A031C1D2A4F5E00B8172A /* TraitCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraitCollectionViewController.h; sourceTree = "<group>"; };
 		5C6A031D1D2A4F5E00B8172A /* TraitCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TraitCollectionViewController.m; sourceTree = "<group>"; };
+		5C6A031F1D2A7A9100B8172A /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = SOURCE_ROOT; };
+		5C6A03201D2A7A9100B8172A /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = SOURCE_ROOT; };
 		5CD1088C1D23A75D000303BE /* UIEMultiAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIEMultiAccess.framework; path = Framework/UIEMultiAccess.framework; sourceTree = "<group>"; };
 		5CD1088E1D23A769000303BE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		5CD108901D23A779000303BE /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
@@ -181,6 +184,8 @@
 		5C4FEC091D0A6C2C00894E56 /* KKPNews */ = {
 			isa = PBXGroup;
 			children = (
+				5C6A031F1D2A7A9100B8172A /* Reachability.h */,
+				5C6A03201D2A7A9100B8172A /* Reachability.m */,
 				5CDC28901D1D2399002B4454 /* tutorial */,
 				5CDC288F1D1D234F002B4454 /* TutorialViews */,
 				5C5A33BC1D0E78CE005D7109 /* Views */,
@@ -484,6 +489,7 @@
 				5C4FEC0F1D0A6C2C00894E56 /* AppDelegate.m in Sources */,
 				5CDC288A1D1D2342002B4454 /* TutorialNavigationController.m in Sources */,
 				5C5A33C21D0E957B005D7109 /* Youtube.m in Sources */,
+				5C6A03211D2A7A9100B8172A /* Reachability.m in Sources */,
 				5C4FEC0C1D0A6C2C00894E56 /* main.m in Sources */,
 				5CDC28971D1D3167002B4454 /* CustomSlider.m in Sources */,
 				5C5A33C51D112C9E005D7109 /* FirstScreenViewController.m in Sources */,

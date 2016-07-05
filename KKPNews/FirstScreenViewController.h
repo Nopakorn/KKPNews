@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Youtube.h"
+#import "Reachability.h"
 
 @interface FirstScreenViewController : UIViewController<UIAlertViewDelegate>
 {
-
+    UIAlertController *alert;
+    Reachability *internetReachable;
+    Reachability *hostReachable;
 }
 
 @property (strong, nonatomic) Youtube *youtube;

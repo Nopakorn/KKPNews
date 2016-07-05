@@ -100,6 +100,7 @@
             //[self fetchVideos:nextPage];
         }else{
             NSLog(@"%@",error);
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ErrorResponse" object:self];
         }
             
     }] resume];
@@ -126,6 +127,7 @@
             [self fetchVideosDuration];
         }else{
             NSLog(@"%@",error);
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ErrorRespones" object:self];
         }
         
     }] resume];

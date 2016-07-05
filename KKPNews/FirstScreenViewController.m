@@ -9,6 +9,7 @@
 #import "FirstScreenViewController.h"
 #import "MainViewController.h"
 
+
 @interface FirstScreenViewController ()
 
 @end
@@ -22,6 +23,11 @@
     NSMutableArray *channelListEN;
     NSString *videoIdString;
     BOOL jp;
+    
+    BOOL internetActive;
+    BOOL hostActive;
+    BOOL loadApiFact;
+    BOOL alertFact;
 }
 
 - (void)viewDidLoad {
@@ -31,10 +37,14 @@
     [self.spinner startAnimating];
     jp = YES;
     
+    loadApiFact = YES;
+    internetActive = NO;
+    hostActive = NO;
+    alertFact = NO;
+    
     NSLocale *currentLocale = [NSLocale currentLocale];
     NSString *region = [currentLocale objectForKey:NSLocaleCountryCode];
-    NSLog(@"region code %@",region);
-    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"tutorialPass"];
+
     if ([region isEqualToString:@"JP"]) {
         jp = YES;
     } else {
@@ -43,7 +53,6 @@
     
     if (jp) {
         channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
-//        channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", nil];
         count = [channelListJP count];
     } else {
         channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews"  @"UCCcey5CP5GDZeom987gqTdg", nil];
@@ -60,21 +69,143 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"tutorialPass"]) {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    internetReachable = [Reachability reachabilityForInternetConnection];
+    [internetReachable startNotifier];
+    hostReachable = [Reachability reachabilityWithHostName:@"www.youtube.com"];
+    [hostReachable startNotifier];
+
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ErrorResponse" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
+}
+
+#pragma mark - networking
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus) {
+        case NotReachable:
+        {
+            
+            internetActive = NO;
+            alertFact = YES;
+            break;
+            
+        }
+        case ReachableViaWiFi:
+        {
+            internetActive = YES;
+            alertFact = YES;
+            break;
+            
+        }
+        case ReachableViaWWAN:
+        {
+            
+            internetActive = YES;
+            alertFact = YES;
+            break;
+            
+        }
+            
+            
+        default:
+            break;
+    }
+    
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus)
+    {
+        case NotReachable:
+        {
+            
+            hostActive = NO;
+            
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            
+            hostActive = YES;
+            
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            
+            hostActive = YES;
+            
+            break;
+        }
+    }
+    if (alertFact) {
         
-        self.youtube = [[Youtube alloc] init];
-        [self callYoutube];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedLoadVideoId)
-                                                     name:@"LoadVideoId" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedLoadVideoDuration)
-                                                     name:@"LoadVideoDuration" object:nil];
+        [self showingNetworkStatus];
+        
+        
+    }
+    
+}
+
+- (void)showingNetworkStatus
+{
+    NSLog(@"show network status %id",internetActive);
+    alertFact = NO;
+    if (internetActive) {
+        if (loadApiFact) {
+            loadApiFact = NO;
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"tutorialPass"]) {
+                [self.youtube.durationList removeAllObjects];
+                [self.youtube.data removeAllObjects];
+                self.youtube = [[Youtube alloc] init];
+                [self callYoutube];
+                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                         selector:@selector(receivedLoadVideoId)
+                                                             name:@"LoadVideoId" object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                         selector:@selector(receivedLoadVideoDuration)
+                                                             name:@"LoadVideoDuration" object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                         selector:@selector(receivedErrorResponse)
+                                                             name:@"ErrorResponse" object:nil];
+                
+            } else {
+                [self performSegueWithIdentifier:@"TutorialPhase" sender:@0];
+            }
+
+            
+        }
         
     } else {
-        [self performSegueWithIdentifier:@"TutorialPhase" sender:@0];
+        alertFact = YES;
+        loadApiFact = YES;
+        
+        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"Can Not Connected To The Internet.", nil)];
+        
+        alert = [UIAlertController alertControllerWithTitle:description
+                                                    message:@""
+                                             preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction *action){
+                                                       alertFact = YES;
+                                                       [alert dismissViewControllerAnimated:YES completion:nil];
+                                                   }];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ErrorResponse" object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
     }
-    //[self performSegueWithIdentifier:@"mainSegue" sender:nil];
+    
 }
 
 
@@ -109,9 +240,16 @@
    
 }
 
+#pragma mark - call api
 - (void)callYoutube
 {
+    NSLog(@"callyoutube api");
+    
+    countDuration = 1;
+    item = 0;
+    videoIdString = @"";
     if (jp) {
+        count = [channelListJP count];
         for (int i = 0; i < [channelListJP count]; i++) {
             if ( i == [channelListJP count]-1 ) {
                 [self.youtube getVideoPlaylistFromUploadIds:[channelListJP objectAtIndex:i] withNextPage:NO];
@@ -120,13 +258,9 @@
             }
             
         }
-//        if ( item == [channelListJP count]-1 ) {
-//            [self.youtube getVideoPlaylistFromUploadIds:[channelListJP objectAtIndex:item] withNextPage:NO];
-//        } else {
-//            [self.youtube getChannelIdFromPlaylistName:[channelListJP objectAtIndex:item]];
-//        }
+
     } else {
-        
+        count = [channelListEN count];
         for (int i = 0; i < [channelListEN count]; i++) {
             if ( i == [channelListEN count]-1 ) {
                 [self.youtube getVideoPlaylistFromUploadIds:[channelListEN objectAtIndex:i] withNextPage:NO];
@@ -137,8 +271,38 @@
         }
         
     }
+}
 
-    //[self.youtube getChannelIdFromPlaylistName:[channelList objectAtIndex:item]];
+- (void)receivedErrorResponse
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ErrorResponse" object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
+        
+        if (internetActive) {
+            [self.youtube.durationList removeAllObjects];
+            [self.youtube.data removeAllObjects];
+            self.youtube = [[Youtube alloc] init];
+            [self callYoutube];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedLoadVideoId)
+                                                         name:@"LoadVideoId" object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedLoadVideoDuration)
+                                                         name:@"LoadVideoDuration" object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedErrorResponse)
+                                                         name:@"ErrorResponse" object:nil];
+
+        } else {
+            
+            [self.youtube.durationList removeAllObjects];
+            [self.youtube.data removeAllObjects];
+            self.youtube = [[Youtube alloc] init];
+        }
+        
+    });
 }
 
 - (void)receivedLoadVideoId
@@ -176,7 +340,6 @@
             
             NSString *reqVideoIds = @"";
             for (int i = 0; i < [self.youtube.data count]; i++) {
-//                NSLog(@"videoID: %@ publishedAt: %@", [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"], [[self.youtube.data objectAtIndex:i] objectForKey:@"publishedAtList"]);
                 reqVideoIds = [NSString stringWithFormat:@"%@,%@", reqVideoIds, [[self.youtube.data objectAtIndex:i] objectForKey:@"videoId"]];
             }
             

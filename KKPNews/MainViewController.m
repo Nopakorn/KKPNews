@@ -77,6 +77,12 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     NSInteger indexFocus;
     BOOL kkpTriggered;
     NSInteger directionFocus;
+    
+    BOOL internetActive;
+    BOOL hostActive;
+    BOOL loadApiFact;
+    BOOL alertFact;
+    BOOL videoEndedFact;
 }
 
 @synthesize youtube;
@@ -117,6 +123,11 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
+    internetActive = NO;
+    hostActive = NO;
+    loadApiFact = NO;
+    alertFact = NO;
+    videoEndedFact = NO;
 #pragma setup UMA in ViewDidload
     _inputDevices = [NSMutableArray array];
     _umaApp = [UMAApplication sharedApplication];
@@ -142,6 +153,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
     [hidingView invalidate];
 }
 
@@ -158,10 +170,111 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                                     WithDiscoveryInterval:kHidDeviceControlTimeout
                                     WithConnectionTimeout:kHidDeviceControlTimeout];
     [_hidManager startDiscoverWithDeviceName:nil];
-    
+    //-network
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    internetReachable = [Reachability reachabilityForInternetConnection];
+    [internetReachable startNotifier];
+    hostReachable = [Reachability reachabilityWithHostName:@"www.youtube.com"];
+    [hostReachable startNotifier];
 }
 
+#pragma mark - network
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus) {
+        case NotReachable:
+        {
+            internetActive = NO;
+            alertFact = YES;
+            break;
+            
+        }
+        case ReachableViaWiFi:
+        {
+            internetActive = YES;
+            alertFact = YES;
+            break;
+            
+        }
+        case ReachableViaWWAN:
+        {
+            internetActive = YES;
+            alertFact = YES;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus)
+    {
+        case NotReachable:
+        {
+            hostActive = NO;
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            hostActive = YES;
+            break;
+        }
+        case ReachableViaWWAN:
+        {
+            hostActive = YES;
+            break;
+        }
+    }
+    
+    if (alertFact) {
+        [self showingNetworkStatus];
+    }
+}
 
+- (void)showingNetworkStatus
+{
+    NSLog(@"show network status %id",internetActive);
+    alertFact = NO;
+    if (internetActive) {
+        if (videoEndedFact) {
+            NSLog(@"end state");
+            [self playerView:self.playerView didChangeToState:kYTPlayerStateEnded];
+            videoEndedFact = NO;
+        }
+        
+        if (loadApiFact) {
+            loadApiFact = NO;
+            if (spinnerFact) {
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
+                [self callYoutube:self.regionJp];
+                NSLog(@"call youtube api internet active");
+            }
+        }
+        
+        
+    } else {
+        NSLog(@"no internet");
+        alertFact = YES;
+        loadApiFact = YES;
+        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"Can Not Connected To The Internet.", nil)];
+        
+        alert = [UIAlertController alertControllerWithTitle:description
+                                                    message:@""
+                                             preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction *action){
+                                                       alertFact = YES;
+                                                       [alert dismissViewControllerAnimated:YES completion:nil];
+                                                   }];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -356,14 +469,8 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 
 - (void)hide
 {
-//     if (self.controllerAreaView.hidden == YES) {
-//         self.btmControlAreaConstraint.constant = 0;
-//         self.heightControllerAreaConstraint.constant = 0;
-//         self.youtubeTableView.hidden = YES;
-//         self.controllerAreaView.hidden = YES;
-//     }
-
      if ( self.youtubeTableView.hidden == YES && self.controllerAreaView.hidden == YES) {
+         
           self.btmControlAreaConstraint.constant = 320;
           self.heightControllerAreaConstraint.constant = 44;
           self.youtubeTableView.hidden = NO;
@@ -413,6 +520,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     refreshFact = YES;
     self.loadingSpinner.hidden = NO;
     spinnerFact = YES;
+    
     if (jp) {
         channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
         count = [channelListJP count];
@@ -454,9 +562,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     dispatch_async(dispatch_get_main_queue(), ^{
         
         count--;
-        //item++;
         if (count == 0) {
-            //new ways--
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
             NSDate *dateFromString;
@@ -579,6 +685,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 #pragma mark - YTPlayerView delegate
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
+    videoEndedFact = NO;
     self.progressSlider.value = 0;
     self.currentTime.text = @"00:00";
     self.totalTime.text = @"00:00";
@@ -658,7 +765,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
         NSString *dateText = [NSString stringWithFormat:@"%@: %@",[NSString stringWithFormat:NSLocalizedString(@"Last Updated", nil)],[dateFormatter stringFromDate:[NSDate date]]];
         self.dateTimeLabel.text = dateText;
-
+        loadApiFact = YES;
         [self callYoutube:self.regionJp];
     }
 
@@ -684,36 +791,47 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 {
 
     if (state == kYTPlayerStateEnded) {
-        if(spinnerFact){
-            NSLog(@"still loading");
-        } else {
-            if (refreshFact) {
-                item = 0;
-                refreshFact = NO;
-                NSLog(@"fact YES ended");
-                
+        videoEndedFact = YES;
+        if (internetActive) {
+            if(spinnerFact){
+                NSLog(@"still loading");
             } else {
-                
-                if (item == [self.youtube.data count]-1) {
+                if (refreshFact) {
                     item = 0;
+                    refreshFact = NO;
+                    NSLog(@"fact YES ended");
                     [_focusManager setFocusRootView:self.youtubeTableView];
                     [_focusManager moveFocus:1 direction:1];
                     [self.timerProgress invalidate];
                     [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
                     [self.youtubeTableView reloadData];
-                    
                 } else {
-                    item+=1;
-                    [self.timerProgress invalidate];
-                    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-                    [self.youtubeTableView reloadData];
+                    
+                    if (item == [self.youtube.data count]-1) {
+                        item = 0;
+                        [_focusManager setFocusRootView:self.youtubeTableView];
+                        [_focusManager moveFocus:1 direction:1];
+                        [self.timerProgress invalidate];
+                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                        [self.youtubeTableView reloadData];
+                        
+                    } else {
+                        item+=1;
+                        [self.timerProgress invalidate];
+                        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                        [self.youtubeTableView reloadData];
+                    }
                 }
+                
             }
-            
+        } else {
+            NSLog(@"NO internet");
+            [self.timerProgress invalidate];
+            [self.playerView pauseVideo];
         }
-        
-        
+
     } else if (state == kYTPlayerStatePlaying) {
+        
         UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
         [self.playButton setImage:btnImagePause forState:UIControlStateNormal];
         self.playerTotalTime = [self.playerView duration];
@@ -747,6 +865,11 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 item = 0;
                 refreshFact = NO;
                 NSLog(@"fact YES unstarted");
+                [_focusManager setFocusRootView:self.youtubeTableView];
+                [_focusManager moveFocus:1 direction:1];
+                [self.timerProgress invalidate];
+                [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+                [self.youtubeTableView reloadData];
             } else {
                 if (item == [self.youtube.data count]-1) {
                     item = 0;
@@ -844,11 +967,42 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.playerView pauseVideo];
-    refreshFact = NO;
-    item = indexPath.row;
-    [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
-    [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.youtubeTableView reloadData];
+    if (internetActive) {
+        refreshFact = NO;
+        item = indexPath.row;
+        [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
+        [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.youtubeTableView reloadData];
+        
+        [_focusManager setFocusRootView:self.youtubeTableView];
+        indexFocus = [_focusManager focusIndex];
+        
+        if (indexFocus > item) {
+            [_focusManager moveFocus:item direction:kUMAFocusBackward];
+        } else if (indexFocus < item) {
+            [_focusManager moveFocus:item direction:kUMAFocusForward];
+        }
+        
+        
+    } else {
+        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The internet is not available.", nil)];
+        
+        alert = [UIAlertController alertControllerWithTitle:description
+                                                    message:@""
+                                             preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction *action){
+                                                    
+                                                       [alert dismissViewControllerAnimated:YES completion:nil];
+                                                   }];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+        [self.youtubeTableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.youtubeTableView reloadData];
+    }
+    
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -962,8 +1116,8 @@ float level = 0.0;
 {
     kkpTriggered = YES;
     [hidingView invalidate];
-//    NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
-//    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
+    NSLog(@"distanceX %lu distanceY %ld",(unsigned long)distanceX,(long)distanceY);
+    NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
     indexFocus = [_focusManager focusIndex];
     if (spinnerFact) {
         
@@ -1021,7 +1175,6 @@ float level = 0.0;
             [self.playerView loadWithVideoId:[[self.youtube.data objectAtIndex:item] objectForKey:@"videoId"] playerVars:self.playerVars];
             [self.youtubeTableView reloadData];
             refreshFact = NO;
-            NSLog(@"FACT YES");
             return YES;
             
         } else {
@@ -1076,6 +1229,7 @@ float level = 0.0;
                 }
             }
             hidingView = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hide) userInfo:nil repeats:NO];
+            NSLog(@"focus index %ld",(long)[_focusManager focusIndex]);
             return NO;
 
         }

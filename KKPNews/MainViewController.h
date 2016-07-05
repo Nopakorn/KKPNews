@@ -11,13 +11,16 @@
 #import "Youtube.h"
 #import <UIEMultiAccess/UIEMultiAccess.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "Reachability.h"
 
 @interface MainViewController : UIViewController <YTPlayerViewDelegate, UITableViewDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UMAFocusManagerDelegate>
 {
     UIActivityIndicatorView *spinner;
     NSTimer *hidingView;
     
-    
+    UIAlertController *alert;
+    Reachability *internetReachable;
+    Reachability *hostReachable;
 }
 
 //@property (nonatomic) UMAApplication *umaApp;
