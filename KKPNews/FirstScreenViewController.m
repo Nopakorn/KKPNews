@@ -55,7 +55,7 @@
         channelListJP = [NSMutableArray arrayWithObjects:@"ANNnewsCH", @"tbsnewsi", @"NHKonline", @"JiJi", @"sankeinews", @"YomiuriShimbun", @"tvasahi", @"KyodoNews", @"asahicom", @"UCYfdidRxbB8Qhf0Nx7ioOYw", nil];
         count = [channelListJP count];
     } else {
-        channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews"  @"UCCcey5CP5GDZeom987gqTdg", nil];
+        channelListEN = [NSMutableArray arrayWithObjects:@"Euronews", @"bbcnews", @"AlJazeeraEnglish", @"AssociatedPress", @"RussiaToday", @"WashingtonPost", @"France24english", @"thenewyorktimes", @"CSPAN", @"NYPost", @"ReutersVideo", @"Bloomberg", @"Foxnewschannel", @"afpbbnews", @"UCCcey5CP5GDZeom987gqTdg", nil];
         count = [channelListEN count];
     }
     
@@ -156,7 +156,7 @@
 
 - (void)showingNetworkStatus
 {
-    NSLog(@"show network status %id",internetActive);
+
     alertFact = NO;
     if (internetActive) {
         if (loadApiFact) {
@@ -243,8 +243,6 @@
 #pragma mark - call api
 - (void)callYoutube
 {
-    NSLog(@"callyoutube api");
-    
     countDuration = 1;
     item = 0;
     videoIdString = @"";
@@ -256,9 +254,7 @@
             } else {
                 [self.youtube getChannelIdFromPlaylistName:[channelListJP objectAtIndex:i]];
             }
-            
         }
-
     } else {
         count = [channelListEN count];
         for (int i = 0; i < [channelListEN count]; i++) {
@@ -312,8 +308,6 @@
         count--;
         item++;
         if (count == 0) {
-            NSLog(@"what we got --- ");
-            //NSLog(@"%@",self.youtube.jsonRes);
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
             NSDate *dateFromString;

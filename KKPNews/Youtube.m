@@ -97,7 +97,6 @@
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
             checkResult = @"LoadVideoId";
-            //[self fetchVideos:nextPage];
         }else{
             NSLog(@"%@",error);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ErrorResponse" object:self];
@@ -174,7 +173,6 @@
     }
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"LoadVideoId" object:self];
-    //[self getVideoDurations:self.videoIdListForGetDuration];
 }
 
 @end

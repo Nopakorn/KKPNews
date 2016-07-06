@@ -245,7 +245,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 
 - (void)showingNetworkStatus
 {
-    NSLog(@"show network status %id",internetActive);
     alertFact = NO;
     if (internetActive) {
         [alert dismissViewControllerAnimated:YES completion:nil];
@@ -555,8 +554,10 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         countDuration = 1;
         for (int i = 0; i < [channelListEN count]; i++) {
             if ( i == [channelListEN count]-1 ) {
+                
                 [self.youtube getVideoPlaylistFromUploadIds:[channelListEN objectAtIndex:i] withNextPage:NO];
             } else {
+               
                 [self.youtube getChannelIdFromPlaylistName:[channelListEN objectAtIndex:i]];
             }
             
