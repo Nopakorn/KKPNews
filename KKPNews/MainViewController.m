@@ -815,7 +815,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                 if (refreshFact) {
                     item = 0;
                     refreshFact = NO;
-                    NSLog(@"fact YES ended");
                     [_focusManager setFocusRootView:self.youtubeTableView];
                     [_focusManager moveFocus:1 direction:1];
                     [self.timerProgress invalidate];
@@ -888,6 +887,24 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     } else if (state == kYTPlayerStateUnstarted) {
         if(spinnerFact){
             NSLog(@"still loading");
+            if (moveDown) {
+                item+=1;
+                [self.timerProgress invalidate];
+                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
+                [self.youtubeTableView reloadData];
+            }
+            
+            if (moveUp) {
+                item-=1;
+                [self.timerProgress invalidate];
+                UIImage *btnImagePlay = [UIImage imageNamed:@"play"];
+                [self.playButton setImage:btnImagePlay forState:UIControlStateNormal];
+                [self.playerView loadWithVideoId:[self.videoPlaylist objectAtIndex:item] playerVars:self.playerVars];
+                [self.youtubeTableView reloadData];
+            }
+
         } else {
             if (refreshFact) {
                 item = 0;
@@ -1224,6 +1241,7 @@ float level = 0.0;
             } else {
                 if (self.controllerAreaView.hidden == YES) {
                     self.controllerAreaView.hidden = NO;
+                    return YES;
                 } else {
                     if ((distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1) ) {
                         moveDown = YES;
@@ -1322,6 +1340,10 @@ float level = 0.0;
 
 - (BOOL)umaDidPressUpButton:(UMAInputButtonType)button
 {
+    if ([[self getButtonName:button] isEqualToString:@"Home"]) {
+        return NO;
+    }
+    
     if ([[self getButtonName:button] isEqualToString:@"Main"]) {
         UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
         UIImage *btnImagePlay = [UIImage imageNamed:@"play"];

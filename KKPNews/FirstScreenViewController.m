@@ -215,7 +215,7 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             NSLog(@"ipad interface running portrait");
-            UIImage *ipadScreen = [UIImage imageNamed:@"ipad_pt(w5-6)2x"];
+            UIImage *ipadScreen = [UIImage imageNamed:@"ipad_pt(w5-6)2x_v2"];
             [self.ipadImageScreen setImage:ipadScreen];
             self.spinnerBtmConstraint.constant = 134;
         } else {
@@ -226,7 +226,7 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             NSLog(@"ipad interface running landscape");
-            UIImage *ipadScreen = [UIImage imageNamed:@"ipad_ls(iOS5-6)2x"];
+            UIImage *ipadScreen = [UIImage imageNamed:@"ipad_ls(iOS5-6)2x_v2"];
             [self.ipadImageScreen setImage:ipadScreen];
             self.spinnerBtmConstraint.constant = 100;
         } else {
@@ -378,7 +378,6 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         countDuration+=1;
-        NSLog(@"count %ld",(long)countDuration);
         if (jp) {
             
             if (countDuration == [channelListJP count]) {
