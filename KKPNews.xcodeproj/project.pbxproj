@@ -26,6 +26,7 @@
 		5C6A03211D2A7A9100B8172A /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C6A03201D2A7A9100B8172A /* Reachability.m */; };
 		5CC608EF1D2FAC2200E1F226 /* UIEMultiAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CC608EE1D2FAC2200E1F226 /* UIEMultiAccess.framework */; };
 		5CC608F11D2FAC2F00E1F226 /* UIEMultiAccess.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5CC608F01D2FAC2F00E1F226 /* UIEMultiAccess.bundle */; };
+		5CC608F31D339F9E00E1F226 /* tutorial in Resources */ = {isa = PBXBuildFile; fileRef = 5CC608F21D339F9E00E1F226 /* tutorial */; };
 		5CD1088F1D23A769000303BE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD1088E1D23A769000303BE /* CoreMedia.framework */; };
 		5CD108911D23A779000303BE /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108901D23A779000303BE /* ExternalAccessory.framework */; };
 		5CD108931D23A784000303BE /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD108921D23A784000303BE /* CoreBluetooth.framework */; };
@@ -39,7 +40,6 @@
 		5CDC288C1D1D2342002B4454 /* Tutorial1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28851D1D2342002B4454 /* Tutorial1ViewController.m */; };
 		5CDC288D1D1D2342002B4454 /* Tutorial3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28871D1D2342002B4454 /* Tutorial3ViewController.m */; };
 		5CDC288E1D1D2342002B4454 /* Tutorial4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */; };
-		5CDC28911D1D2399002B4454 /* tutorial in Resources */ = {isa = PBXBuildFile; fileRef = 5CDC28901D1D2399002B4454 /* tutorial */; };
 		5CDC28971D1D3167002B4454 /* CustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDC28961D1D3167002B4454 /* CustomSlider.m */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +98,7 @@
 		5C6A03201D2A7A9100B8172A /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = SOURCE_ROOT; };
 		5CC608EE1D2FAC2200E1F226 /* UIEMultiAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIEMultiAccess.framework; path = Framework/UIEMultiAccess.framework; sourceTree = "<group>"; };
 		5CC608F01D2FAC2F00E1F226 /* UIEMultiAccess.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = UIEMultiAccess.bundle; path = Framework/UIEMultiAccess.bundle; sourceTree = "<group>"; };
+		5CC608F21D339F9E00E1F226 /* tutorial */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tutorial; sourceTree = SOURCE_ROOT; };
 		5CD1088E1D23A769000303BE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		5CD108901D23A779000303BE /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		5CD108921D23A784000303BE /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -116,7 +117,6 @@
 		5CDC28871D1D2342002B4454 /* Tutorial3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial3ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial3ViewController.m"; sourceTree = "<group>"; };
 		5CDC28881D1D2342002B4454 /* Tutorial4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial4ViewController.h; path = "../../Youtube-Feed/Youtube-Feed/Tutorial4ViewController.h"; sourceTree = "<group>"; };
 		5CDC28891D1D2342002B4454 /* Tutorial4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial4ViewController.m; path = "../../Youtube-Feed/Youtube-Feed/Tutorial4ViewController.m"; sourceTree = "<group>"; };
-		5CDC28901D1D2399002B4454 /* tutorial */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tutorial; path = "/Users/ssd/Documents/Youtube-Feed/Youtube-Feed/../../../Desktop/tutorial"; sourceTree = "<absolute>"; };
 		5CDC28951D1D3167002B4454 /* CustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSlider.h; sourceTree = "<group>"; };
 		5CDC28961D1D3167002B4454 /* CustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSlider.m; sourceTree = "<group>"; };
 		8AABE8C229190EFFCE82A3E2 /* Pods-KKPNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKPNews.release.xcconfig"; path = "Pods/Target Support Files/Pods-KKPNews/Pods-KKPNews.release.xcconfig"; sourceTree = "<group>"; };
@@ -184,9 +184,9 @@
 		5C4FEC091D0A6C2C00894E56 /* KKPNews */ = {
 			isa = PBXGroup;
 			children = (
+				5CC608F21D339F9E00E1F226 /* tutorial */,
 				5C6A031F1D2A7A9100B8172A /* Reachability.h */,
 				5C6A03201D2A7A9100B8172A /* Reachability.m */,
-				5CDC28901D1D2399002B4454 /* tutorial */,
 				5CDC288F1D1D234F002B4454 /* TutorialViews */,
 				5C5A33BC1D0E78CE005D7109 /* Views */,
 				5C5A33B51D0E75EA005D7109 /* CustomCells */,
@@ -408,8 +408,8 @@
 				5CD1089B1D23BCAB000303BE /* Assets.bundle in Resources */,
 				5C4FEC1D1D0A6C2C00894E56 /* LaunchScreen.storyboard in Resources */,
 				5C60078D1D22326F00176B4B /* Localizable.strings in Resources */,
-				5CDC28911D1D2399002B4454 /* tutorial in Resources */,
 				5C4FEC1A1D0A6C2C00894E56 /* Assets.xcassets in Resources */,
+				5CC608F31D339F9E00E1F226 /* tutorial in Resources */,
 				5CC608F11D2FAC2F00E1F226 /* UIEMultiAccess.bundle in Resources */,
 				5C5A33BB1D0E779D005D7109 /* YoutubeListCustomCell.xib in Resources */,
 				5C4FEC151D0A6C2C00894E56 /* Main.storyboard in Resources */,
