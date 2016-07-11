@@ -28,6 +28,7 @@
     BOOL hostActive;
     BOOL loadApiFact;
     BOOL alertFact;
+    int start;
 }
 
 - (void)viewDidLoad {
@@ -306,13 +307,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         count--;
-        item++;
+        
         if (count == 0) {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
             NSDate *dateFromString;
+            
             for (NSDictionary* a in self.youtube.jsonRes) {
                 NSArray *arr = a[@"items"];
+                item++;
                 for (NSDictionary* q in arr) {
                     if (q[@"snippet"][@"thumbnails"][@"default"][@"url"] != nil) {
                         
@@ -321,13 +324,12 @@
                                                 @"publishedAtList":dateFromString,
                                                 @"thumbnail":q[@"snippet"][@"thumbnails"][@"default"][@"url"],
                                                 @"title":q[@"snippet"][@"title"] };
-                        
                         [self.youtube.data addObject:data];
                     }
                 }
             }
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoId" object:nil];
-            
+
             //sort
             NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"publishedAtList" ascending:NO];
             [self.youtube.data sortUsingDescriptors:[NSArray arrayWithObject:descriptor]];
@@ -342,21 +344,21 @@
             }
             videoIdString = reqVideoIds;
             [self callAllVideoDuration:videoIdString];
-        } else {
-            //[self callYoutube];
-        }
+        } 
     });
     
 }
 
 - (void)callAllVideoDuration:(NSString *)reqVideoIds
 {
-    int start = (int)[self.youtube.durationList count];
+    start = (int)[self.youtube.durationList count];
     NSInteger lengthCall = countDuration * 50;
     NSArray *arrString = [reqVideoIds componentsSeparatedByString:@","];
-    
-    if (lengthCall <= [arrString count]) {
-    
+    NSInteger restCall = [arrString count]-start;
+
+    if (restCall < 50 && restCall > 0) {
+        
+        lengthCall = start+restCall;
         NSString *newArr = @"";
         for (int i = start; i < lengthCall; i++) {
             newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
@@ -365,11 +367,25 @@
         if ([newArr characterAtIndex:0] == ',') {
             newArr = [newArr substringFromIndex:1];
         }
-        
         [self.youtube getVideoDurations:newArr];
     } else {
-        [self receivedLoadVideoDuration];
+        
+        if (lengthCall <= [arrString count]) {
+            NSString *newArr = @"";
+            for (int i = start; i < lengthCall; i++) {
+                newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
+            }
+            
+            if ([newArr characterAtIndex:0] == ',') {
+                newArr = [newArr substringFromIndex:1];
+            }
+            [self.youtube getVideoDurations:newArr];
+        } else {
+            [self receivedLoadVideoDuration];
+        }
     }
+    
+    
     
 
 }
@@ -378,24 +394,12 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         countDuration+=1;
-        if (jp) {
-            
-            if (countDuration == [channelListJP count]) {
-                [self performSegueWithIdentifier:@"mainSegue" sender:nil];
-                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
-            } else {
-                [self callAllVideoDuration:videoIdString];
-            }
+        if (start == [self.youtube.data count]) {
+            [self performSegueWithIdentifier:@"mainSegue" sender:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
         } else {
-            
-            if (countDuration == [channelListEN count]) {
-                [self performSegueWithIdentifier:@"mainSegue" sender:nil];
-                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoadVideoDuration" object:nil];
-            } else {
-                [self callAllVideoDuration:videoIdString];
-            }
+            [self callAllVideoDuration:videoIdString];
         }
-
     });
 }
 

@@ -86,6 +86,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     
     BOOL moveDown;
     BOOL moveUp;
+    int start;
 }
 
 @synthesize youtube;
@@ -132,13 +133,13 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     alertFact = NO;
     videoEndedFact = NO;
     moveUp = NO;
-    moveDown = NO;
+    moveDown = YES;
     
 #pragma setup UMA in ViewDidload
     _inputDevices = [NSMutableArray array];
     _umaApp = [UMAApplication sharedApplication];
     _umaApp.delegate = self;
-    _hidManager = [_umaApp requestHIDManager];
+    //_hidManager = [_umaApp requestHIDManager];
     
     [_umaApp addViewController:self];
     
@@ -149,7 +150,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     [_focusManager setHidden:YES];
     [_focusManager moveFocus:1 direction:1];
     
-    [self prepareBlocks];
+    //[self prepareBlocks];
     //[_hidManager setDisconnectionCallback:_disconnectionBlock];
     
 
@@ -173,11 +174,12 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     tgpr_webView.delegate = self;
     [self.playerView addGestureRecognizer:tgpr_webView];
     
-    [_hidManager setConnectionCallback:_connectionBlock];
-    [_hidManager enableAutoConnectionWithDiscoveryTimeout:kHidDeviceControlTimeout
-                                    WithDiscoveryInterval:kHidDeviceControlTimeout
-                                    WithConnectionTimeout:kHidDeviceControlTimeout];
-    [_hidManager startDiscoverWithDeviceName:nil];
+    NSLog(@"%@");
+//    [_hidManager setConnectionCallback:_connectionBlock];
+//    [_hidManager enableAutoConnectionWithDiscoveryTimeout:kHidDeviceControlTimeout
+//                                    WithDiscoveryInterval:kHidDeviceControlTimeout
+//                                    WithConnectionTimeout:kHidDeviceControlTimeout];
+//    [_hidManager startDiscoverWithDeviceName:nil];
     //-network
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
     internetReachable = [Reachability reachabilityForInternetConnection];
@@ -193,23 +195,18 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
     switch (internetStatus) {
         case NotReachable:
         {
-            NSLog(@"notReachable");
             internetActive = NO;
             alertFact = YES;
             break;
-            
         }
         case ReachableViaWiFi:
         {
-            NSLog(@"reachableWifi");
             internetActive = YES;
             alertFact = YES;
             break;
-            
         }
         case ReachableViaWWAN:
         {
-            NSLog(@"reachableWWAN");
             internetActive = YES;
             alertFact = YES;
             break;
@@ -620,12 +617,14 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
 
 - (void)callAllVideoDuration:(NSString *)reqVideoIds
 {
-    int start = (int)[self.youtube.durationList count];
+    start = (int)[self.youtube.durationList count];
     NSInteger lengthCall = countDuration * 50;
     NSArray *arrString = [reqVideoIds componentsSeparatedByString:@","];
+    NSInteger restCall = [arrString count]-start;
     
-    if (lengthCall <= [arrString count]) {
+    if (restCall < 50 && restCall > 0) {
         
+        lengthCall = start+restCall;
         NSString *newArr = @"";
         for (int i = start; i < lengthCall; i++) {
             newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
@@ -634,10 +633,22 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         if ([newArr characterAtIndex:0] == ',') {
             newArr = [newArr substringFromIndex:1];
         }
-        
         [self.youtube getVideoDurations:newArr];
     } else {
-        [self receivedLoadVideoDuration];
+        
+        if (lengthCall <= [arrString count]) {
+            NSString *newArr = @"";
+            for (int i = start; i < lengthCall; i++) {
+                newArr = [NSString stringWithFormat:@"%@,%@", newArr, [arrString objectAtIndex:i]];
+            }
+            
+            if ([newArr characterAtIndex:0] == ',') {
+                newArr = [newArr substringFromIndex:1];
+            }
+            [self.youtube getVideoDurations:newArr];
+        } else {
+            [self receivedLoadVideoDuration];
+        }
     }
     
     
@@ -649,7 +660,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         countDuration+=1;
         if (self.regionJp) {
             
-            if (countDuration == [channelListJP count]) {
+            if (start == [self.youtube.data count]) {
                 item = 0;
                 spinnerFact = NO;
                 refreshFact = NO;
@@ -671,7 +682,7 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
             }
         } else {
             
-            if (countDuration == [channelListEN count]) {
+            if (start == [self.youtube.data count]) {
                 item = 0;
                 spinnerFact = NO;
                 refreshFact = NO;
@@ -810,7 +821,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         videoEndedFact = YES;
         if (internetActive) {
             if(spinnerFact){
-                NSLog(@"still loading");
             } else {
                 if (refreshFact) {
                     item = 0;
@@ -832,7 +842,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                         
                     } else {
                         if (moveDown) {
-                            NSLog(@"continue move down");
                             item+=1;
                             [_focusManager moveFocus:1 direction:kUMAFocusForward];
                             [self.timerProgress invalidate];
@@ -841,7 +850,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
                         }
                         
                         if (moveUp) {
-                            NSLog(@"continue move up");
                             item-=1;
                             [_focusManager moveFocus:1 direction:kUMAFocusBackward];
                             [self.timerProgress invalidate];
@@ -859,7 +867,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         }
 
     } else if (state == kYTPlayerStatePlaying) {
-        
         UIImage *btnImagePause = [UIImage imageNamed:@"pause"];
         [self.playButton setImage:btnImagePause forState:UIControlStateNormal];
         self.playerTotalTime = [self.playerView duration];
@@ -886,7 +893,6 @@ static const NSTimeInterval kHidDeviceControlTimeout = 5;
         
     } else if (state == kYTPlayerStateUnstarted) {
         if(spinnerFact){
-            NSLog(@"still loading");
             if (moveDown) {
                 item+=1;
                 [self.timerProgress invalidate];

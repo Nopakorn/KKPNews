@@ -136,6 +136,9 @@
 {
     NSArray *items = self.searchResults[@"items"];
     for (NSDictionary* q in items) {
+        if (q[@"contentDetails"][@"duration"] == nil) {
+            NSLog(@"505:duration nil");
+        }
         [self.durationList addObject:q[@"contentDetails"][@"duration"]];
     }
 
